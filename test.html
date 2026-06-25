@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Test Micro</title>
+<style>
+  body{font-family:sans-serif;padding:30px;max-width:600px;margin:0 auto;background:#f5f5f5;}
+  h2{margin-bottom:20px;}
+  button{padding:14px 24px;font-size:15px;border-radius:8px;border:none;cursor:pointer;margin:8px 4px;}
+  .go{background:#1D9E75;color:#fff;}
+  .stop{background:#E24B4A;color:#fff;display:none;}
+  #log{margin-top:20px;padding:14px;border-radius:8px;background:#fff;border:1px solid #ddd;min-height:80px;font-size:13px;line-height:1.7;white-space:pre-wrap;}
+  #texte{margin-top:16px;padding:14px;border-radius:8px;background:#fff;border:1px solid #1D9E75;min-height:100px;font-size:16px;line-height:1.9;}
+  .ok{color:#0F6E56;} .err{color:#A32D2D;} .info{color:#0C447C;}
+</style>
+</head>
+<body>
+<h2>🎙️ Test transcription vocale</h2>
+<button class="go" onclick="startTest()">Démarrer le test</button>
+<button class="stop" id="stopBtn" onclick="stopTest()">Arrêter</button>
+
+<div id="log">En attente…</div>
+<div id="texte" style="display:none;"></div>
+
+<script>
+let sr = null;
+let finalText = '';
+
+function log(msg, type='info') {
+  const el = document.getElementById('log');
+  const time = new Date().toLocaleTimeString();
+  el.innerHTML += `\n[${time}] <span class="${type}">${msg}</span>`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function startTest() {
+  document.getElementById('log').innerHTML = '';
+  log('Vérification SpeechRecognition…', 'info');
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    log('❌ SpeechRecognition NON DISPONIBLE sur ce navigateur.', 'err');
+    log('→ Utilise Chrome ou Edge sur PC.', 'err');
+    return;
+  }
+  log('✅ SpeechRecognition disponible', 'ok');
+
+  log('Demande accès micro…', 'info');
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
+    log('✅ Micro autorisé !', 'ok');
+    stream.getTracks().forEach(t => t.stop()); // libère le stream test
+
+    log('Démarrage transcription…', 'info');
+    sr = new SR();
+    sr.lang = 'fr-FR';
+    sr.interimResults = true;
+    sr.continuous = true;
+
+    sr.onstart = () => log('✅ Transcription démarrée — parle maintenant !', 'ok');
+    sr.onspeechstart = () => log('🎤 Voix détectée !', 'ok');
+    sr.onspeechend = () => log('🔇 Fin de parole détectée', 'info');
+
+    sr.onresult = (e) => {
+      let interim = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) {
+          finalText += t + ' ';
+          log('✅ Final: "' + t + '"', 'ok');
+        } else {
+          interim += t;
+          log('⏳ Interim: "' + t + '"', 'info');
+        }
+      }
+      const el = document.getElementById('texte');
+      el.style.display = 'block';
+      el.textContent = finalText + interim;
+    };
+
+    sr.onerror = (e) => {
+      log('❌ Erreur SR: ' + e.error + ' — ' + (e.message||''), 'err');
+      if (e.error === 'not-allowed') log('→ Autorise le micro dans Chrome (icône 🔒)', 'err');
+      if (e.error === 'network') log('→ Problème réseau (SR nécessite internet)', 'err');
+      if (e.error === 'no-speech') log('→ Aucune voix détectée, continue à parler', 'info');
+    };
+
+    sr.onend = () => {
+      log('SR terminé', 'info');
+      if (document.getElementById('stopBtn').style.display !== 'none') {
+        log('Redémarrage automatique…', 'info');
+        try { sr.start(); } catch(e) { log('Erreur redémarrage: '+e, 'err'); }
+      }
+    };
+
+    try {
+      sr.start();
+      document.querySelector('.go').style.display = 'none';
+      document.getElementById('stopBtn').style.display = 'inline-block';
+    } catch(e) {
+      log('❌ Erreur start(): ' + e, 'err');
+    }
+
+  }).catch(err => {
+    log('❌ Micro refusé: ' + err.name + ' — ' + err.message, 'err');
+    log('→ Clique sur 🔒 dans la barre d\'adresse et autorise le micro', 'err');
+  });
+}
+
+function stopTest() {
+  if (sr) { sr.onend = null; sr.stop(); sr = null; }
+  document.querySelector('.go').style.display = 'inline-block';
+  document.getElementById('stopBtn').style.display = 'none';
+  log('Test arrêté.', 'info');
+}
+</script>
+</body>
+</html>
