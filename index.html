@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MonCours — Aide aux révisions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f7f7f5;
+    --bg3: #f0efe9;
+    --text: #1a1a18;
+    --text2: #6b6a65;
+    --text3: #a09f9a;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --radius: 10px;
+    --radius-lg: 14px;
+    --font: 'Inter', sans-serif;
+    --font-dys: 'Lexend', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg3); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  .header { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
+  .header-logo { font-size: 16px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .header-logo i { font-size: 20px; color: #1D9E75; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+
+  /* LAYOUT */
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* SUBJECT GRID */
+  .screen-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .screen-sub { font-size: 13px; color: var(--text2); margin-bottom: 16px; }
+  .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .subj-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 10px; border-radius: var(--radius-lg); border: 0.5px solid var(--border); background: var(--bg); cursor: pointer; transition: all .15s; font-size: 13px; font-weight: 500; color: var(--text); }
+  .subj-btn:hover { border-color: var(--border2); background: var(--bg2); transform: translateY(-1px); }
+  .subj-btn i { font-size: 26px; }
+
+  /* CHAPTER FORM */
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 0; font-size: 13px; color: var(--text2); background: none; border: none; cursor: pointer; margin-bottom: 16px; }
+  .back-btn:hover { color: var(--text); }
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 14px; }
+  .card-title { font-size: 14px; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .form-row { margin-bottom: 14px; }
+  .form-row:last-child { margin-bottom: 0; }
+  .form-label { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: 6px; }
+  .form-input { width: 100%; padding: 10px 13px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); font-size: 14px; font-family: var(--font); outline: none; transition: border-color .15s; }
+  .form-input:focus { border-color: #1D9E75; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-bottom: 14px; }
+
+  /* TABS */
+  .tabs { display: flex; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 3px; gap: 3px; margin-bottom: 16px; }
+  .tab { flex: 1; padding: 9px 6px; font-size: 12px; font-weight: 500; border: none; background: transparent; color: var(--text2); cursor: pointer; border-radius: 9px; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .tab.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .panel { display: none; } .panel.active { display: block; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text); transition: all .15s; font-family: var(--font); }
+  .btn:hover { background: var(--bg2); }
+  .btn.primary { background: #E1F5EE; border-color: #1D9E75; color: #0F6E56; }
+  .btn.primary:hover { background: #9FE1CB; }
+  .btn.danger:hover { background: #FCEBEB; color: #A32D2D; border-color: #E24B4A; }
+  .btn.full { width: 100%; justify-content: center; padding: 12px; font-size: 14px; }
+  .btn.rec { border-color: #E24B4A; color: #A32D2D; background: #FCEBEB; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+  /* RECORD */
+  .rec-bigbtn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 18px; border-radius: var(--radius-lg); border: 0.5px solid var(--border); background: var(--bg); font-size: 15px; font-weight: 500; cursor: pointer; color: var(--text); transition: all .15s; margin-bottom: 12px; font-family: var(--font); }
+  .rec-bigbtn:hover { background: var(--bg2); }
+  .rec-bigbtn.active { border-color: #E24B4A; color: #A32D2D; background: #FCEBEB; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #E24B4A; display: none; animation: blink 1s infinite; flex-shrink: 0; }
+  .rec-bigbtn.active .dot { display: block; }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.15} }
+
+  .status { font-size: 13px; color: var(--text2); min-height: 20px; margin-bottom: 12px; }
+
+  .rec-list { display: flex; flex-direction: column; gap: 8px; }
+  .rec-item { display: flex; align-items: center; gap: 8px; padding: 10px 13px; border: 0.5px solid var(--border); border-radius: var(--radius); background: var(--bg); }
+  .rec-meta { display: flex; flex-direction: column; min-width: 72px; }
+  .rec-name { font-size: 12px; font-weight: 500; }
+  .rec-dur { font-size: 11px; color: var(--text2); }
+  .rec-item audio { flex: 1; height: 32px; min-width: 0; }
+  .rec-actions { display: flex; gap: 5px; }
+  .icon-btn { padding: 6px 8px; border-radius: var(--radius); border: 0.5px solid var(--border); background: transparent; cursor: pointer; color: var(--text2); font-size: 14px; }
+  .icon-btn:hover { background: var(--bg2); color: var(--text); }
+  .icon-btn.danger:hover { background: #FCEBEB; color: #A32D2D; }
+
+  /* TEXTAREA */
+  .opts-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tog { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--border2); background: var(--bg); cursor: pointer; color: var(--text2); transition: all .15s; font-family: var(--font); }
+  .tog.on { background: #E1F5EE; border-color: #1D9E75; color: #0F6E56; font-weight: 500; }
+  .textarea { width: 100%; min-height: 200px; padding: 13px 15px; border: 0.5px solid var(--border); border-radius: var(--radius-lg); background: var(--bg); color: var(--text); font-size: 17px; line-height: 2; resize: vertical; outline: none; font-family: var(--font); transition: border-color .15s; }
+  .textarea:focus { border-color: #1D9E75; }
+  .textarea.dys { font-family: var(--font-dys); letter-spacing: .06em; word-spacing: .2em; }
+  .textarea.big { font-size: 21px; }
+
+  /* CARTE MENTALE */
+  .mind-empty { text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 14px; }
+  .mind-empty i { font-size: 40px; display: block; margin-bottom: 12px; color: var(--text3); }
+  .mind-center { display: flex; justify-content: center; margin-bottom: 20px; }
+  .mind-node { padding: 12px 24px; border-radius: 30px; background: #EEEDFE; border: 0.5px solid #AFA9EC; font-size: 15px; font-weight: 500; color: #3C3489; text-align: center; max-width: 300px; }
+  .mind-node-sub { font-size: 12px; color: #7F77DD; margin-top: 3px; }
+  .branches { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  .branch { border-radius: var(--radius-lg); border: 0.5px solid var(--border); overflow: hidden; }
+  .branch-head { padding: 9px 13px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+  .branch-body { padding: 10px 13px; font-size: 13px; line-height: 1.8; background: var(--bg); color: var(--text); }
+  .branch-body.dys { font-family: var(--font-dys); letter-spacing: .04em; }
+  .branch-body ul { padding-left: 16px; }
+  .branch-body li { margin-bottom: 4px; }
+  .b-purple .branch-head { background: #EEEDFE; color: #3C3489; }
+  .b-teal   .branch-head { background: #E1F5EE; color: #0F6E56; }
+  .b-coral  .branch-head { background: #FAECE7; color: #712B13; }
+  .b-amber  .branch-head { background: #FAEEDA; color: #633806; }
+  .b-blue   .branch-head { background: #E6F1FB; color: #0C447C; }
+  .mots-wrap { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 13px; background: var(--bg); }
+  .mot { padding: 4px 12px; border-radius: 20px; background: #FAEEDA; color: #633806; font-size: 12px; font-weight: 500; border: 0.5px solid #EF9F27; }
+
+  /* SPINNER */
+  .load-row { display: none; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); padding: 14px 0; }
+  .spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: #1D9E75; border-radius: 50%; animation: spin .8s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg) } }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 500; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+  .toast.ok { background: #E1F5EE; color: #0F6E56; border: 0.5px solid #1D9E75; }
+  .toast.err { background: #FCEBEB; color: #A32D2D; border: 0.5px solid #E24B4A; }
+  .toast.info { background: #E6F1FB; color: #0C447C; border: 0.5px solid #85B7EB; }
+
+  /* WORK HEADER */
+  .work-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chapter-info { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .chap-title-txt { font-size: 15px; font-weight: 500; }
+  .chap-sub-txt { font-size: 13px; color: var(--text2); }
+
+  /* UNSUPPORTED */
+  .warn-box { padding: 12px 16px; border-radius: var(--radius); background: #FAEEDA; border: 0.5px solid #EF9F27; color: #633806; font-size: 13px; margin-bottom: 12px; display: none; }
+
+  @media (max-width: 500px) {
+    .subject-grid { grid-template-columns: repeat(3, 1fr); }
+    .rec-item { flex-wrap: wrap; }
+    .rec-item audio { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo"><i class="ti ti-brain"></i> MonCours</div>
+  <div class="header-right">
+    <span id="headerBadge" style="display:none;"></span>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<div class="container">
+
+  <!-- ===== ÉCRAN 1 : MATIÈRES ===== -->
+  <div class="screen active" id="screen-subjects">
+    <p class="screen-title">Bonjour ! Quelle matière aujourd'hui ?</p>
+    <p class="screen-sub">Choisis une matière pour commencer ton cours.</p>
+    <div class="subject-grid" id="subjGrid"></div>
+  </div>
+
+  <!-- ===== ÉCRAN 2 : CHAPITRE ===== -->
+  <div class="screen" id="screen-chapter">
+    <button class="back-btn" onclick="goBack('subjects')"><i class="ti ti-arrow-left"></i> Changer de matière</button>
+    <div class="badge" id="chapterBadge"></div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-pencil"></i> Nom du chapitre</div>
+      <div class="form-row">
+        <label class="form-label" for="chapTitle">Titre du chapitre</label>
+        <input class="form-input" id="chapTitle" type="text" placeholder="ex : La Révolution française">
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="chapSub">Sous-titre (facultatif)</label>
+        <input class="form-input" id="chapSub" type="text" placeholder="ex : Partie 1 – Les causes">
+      </div>
+    </div>
+    <button class="btn primary full" onclick="goToWork()"><i class="ti ti-arrow-right"></i> Commencer le cours</button>
+  </div>
+
+  <!-- ===== ÉCRAN 3 : TRAVAIL ===== -->
+  <div class="screen" id="screen-work">
+    <div class="work-header">
+      <button class="back-btn" style="margin:0;" onclick="goBack('chapter')"><i class="ti ti-arrow-left"></i> Modifier</button>
+      <div class="chapter-info" id="chapterInfo"></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('audio')"><i class="ti ti-microphone"></i> Audio</button>
+      <button class="tab" onclick="showTab('cours')"><i class="ti ti-file-text"></i> Cours</button>
+      <button class="tab" onclick="showTab('fiche')"><i class="ti ti-hierarchy"></i> Carte mentale</button>
+    </div>
+
+    <!-- AUDIO -->
+    <div class="panel active" id="panel-audio">
+      <div class="warn-box" id="warnAudio"><i class="ti ti-alert-triangle"></i> Micro non disponible sur ce navigateur. Utilise Chrome ou Edge.</div>
+      <button class="rec-bigbtn" id="recBtn" onclick="toggleAudioRec()">
+        <div class="dot"></div>
+        <i class="ti ti-microphone" id="recIco"></i>
+        <span id="recLabel">Démarrer l'enregistrement</span>
+      </button>
+      <p class="status" id="recStatus">Appuie pour enregistrer ton cours en audio.</p>
+      <div class="rec-list" id="recList">
+        <p style="font-size:13px;color:var(--text2);">Aucun enregistrement pour l'instant.</p>
+      </div>
+    </div>
+
+    <!-- COURS -->
+    <div class="panel" id="panel-cours">
+      <div class="warn-box" id="warnDict"><i class="ti ti-alert-triangle"></i> Dictée vocale non disponible. Tu peux coller ton texte directement.</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+        <button class="btn" id="dictBtn" onclick="toggleDict()">
+          <div class="dot" id="dictDot"></div>
+          <i class="ti ti-microphone" id="dictIco"></i>
+          <span id="dictLabel">Dicter le cours</span>
+        </button>
+        <span class="status" id="dictStatus" style="margin:0;">ou colle un texte ci-dessous.</span>
+      </div>
+      <div class="opts-row">
+        <button class="tog on" id="togDys" onclick="toggleDys()"><i class="ti ti-typography"></i> Police Lexend</button>
+        <button class="tog" id="togBig" onclick="toggleBig()"><i class="ti ti-zoom-in"></i> Grand texte</button>
+      </div>
+      <textarea class="textarea dys" id="coursTA" placeholder="Le cours dicté apparaîtra ici. Tu peux aussi coller un texte copié depuis internet ou un PDF."></textarea>
+      <div class="btn-row">
+        <button class="btn primary" onclick="genFiche()"><i class="ti ti-sparkles"></i> Générer la carte mentale</button>
+        <button class="btn" onclick="copyCours()"><i class="ti ti-copy" id="cpyIco"></i> <span id="cpyLbl">Copier</span></button>
+        <button class="btn" onclick="dlCours()"><i class="ti ti-download"></i> Télécharger .txt</button>
+        <button class="btn danger" onclick="clearCours()"><i class="ti ti-trash"></i> Effacer</button>
+      </div>
+    </div>
+
+    <!-- FICHE -->
+    <div class="panel" id="panel-fiche">
+      <div class="load-row" id="loadRow"><div class="spinner"></div><span id="loadMsg">L'IA analyse le cours…</span></div>
+      <div id="ficheZone">
+        <div class="mind-empty">
+          <i class="ti ti-sitemap"></i>
+          Dicte ou colle un cours dans l'onglet <strong>Cours</strong>,<br>puis clique sur <strong>Générer la carte mentale</strong>.
+        </div>
+      </div>
+      <div class="btn-row" id="ficheActs" style="display:none;">
+        <button class="btn" onclick="dlFiche()"><i class="ti ti-download"></i> Télécharger la fiche</button>
+        <button class="btn" onclick="window.print()"><i class="ti ti-printer"></i> Imprimer</button>
+      </div>
+    </div>
+
+  </div><!-- /screen-work -->
+</div><!-- /container -->
+
+<script>
+const SUBJECTS = [
+  {id:'fr',   label:'Français',         icon:'ti-book',           color:'#EEEDFE', border:'#AFA9EC', text:'#3C3489'},
+  {id:'math', label:'Maths',            icon:'ti-math-function',  color:'#E1F5EE', border:'#5DCAA5', text:'#0F6E56'},
+  {id:'hg',   label:'Histoire-Géo',    icon:'ti-world',           color:'#FAEEDA', border:'#EF9F27', text:'#633806'},
+  {id:'svt',  label:'SVT',              icon:'ti-leaf',            color:'#EAF3DE', border:'#97C459', text:'#3B6D11'},
+  {id:'pc',   label:'Physique-Chimie', icon:'ti-flask',            color:'#E6F1FB', border:'#85B7EB', text:'#0C447C'},
+  {id:'en',   label:'Anglais',          icon:'ti-flag',            color:'#FAECE7', border:'#F0997B', text:'#712B13'},
+  {id:'es',   label:'Espagnol',         icon:'ti-sun',             color:'#FCEBEB', border:'#F09595', text:'#A32D2D'},
+  {id:'tech', label:'Technologie',      icon:'ti-cpu',             color:'#F1EFE8', border:'#B4B2A9', text:'#444441'},
+  {id:'autre',label:'À définir',        icon:'ti-plus',            color:'#F1EFE8', border:'#D3D1C7', text:'#5F5E5A'},
+];
+const PALETTES = ['b-purple','b-teal','b-coral','b-amber','b-blue'];
+const ICONS    = ['ti-bulb','ti-list','ti-star','ti-tag','ti-bookmark'];
+
+let currentSubj = null;
+let isDys = true, isBig = false, finalT = '';
+let mediaRec = null, audioChunks = [], isAudioRec = false, recTimer = null, recSecs = 0;
+let dictRec = null, isDicting = false;
+let recordings = [];
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+/* ---- BUILD SUBJECT GRID ---- */
+function buildSubjGrid() {
+  document.getElementById('subjGrid').innerHTML = SUBJECTS.map(s => `
+    <button class="subj-btn" onclick="selectSubj('${s.id}')" style="border-color:${s.border};">
+      <i class="ti ${s.icon}" style="color:${s.text};"></i>
+      <span>${s.label}</span>
+    </button>`).join('');
+}
+
+/* ---- NAVIGATION ---- */
+function selectSubj(id) {
+  currentSubj = SUBJECTS.find(s => s.id === id);
+  const b = document.getElementById('chapterBadge');
+  b.style.cssText = `background:${currentSubj.color};border:0.5px solid ${currentSubj.border};color:${currentSubj.text};`;
+  b.innerHTML = `<i class="ti ${currentSubj.icon}"></i> ${currentSubj.label}`;
+  document.getElementById('chapTitle').value = '';
+  document.getElementById('chapSub').value = '';
+  showScreen('screen-chapter');
+}
+
+function goBack(to) {
+  showScreen('screen-' + to);
+}
+
+function goToWork() {
+  const title = document.getElementById('chapTitle').value.trim();
+  if (!title) { document.getElementById('chapTitle').focus(); toast('Entre le titre du chapitre','err'); return; }
+  const sub = document.getElementById('chapSub').value.trim();
+  const ci = document.getElementById('chapterInfo');
+  ci.innerHTML = `
+    <span class="badge" style="background:${currentSubj.color};border:0.5px solid ${currentSubj.border};color:${currentSubj.text};">
+      <i class="ti ${currentSubj.icon}"></i> ${currentSubj.label}
+    </span>
+    <span class="chap-title-txt">${title}</span>
+    ${sub ? `<span class="chap-sub-txt">— ${sub}</span>` : ''}`;
+  const hb = document.getElementById('headerBadge');
+  hb.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;background:${currentSubj.color};border:0.5px solid ${currentSubj.border};color:${currentSubj.text};`;
+  hb.innerHTML = `<i class="ti ${currentSubj.icon}"></i> ${currentSubj.label}`;
+  resetWork();
+  showScreen('screen-work');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id !== 'screen-work') document.getElementById('headerBadge').style.display = 'none';
+}
+
+function resetWork() {
+  finalT = ''; isDicting = false; isAudioRec = false; recordings = [];
+  document.getElementById('coursTA').value = '';
+  document.getElementById('ficheZone').innerHTML = '<div class="mind-empty"><i class="ti ti-sitemap"></i>Dicte ou colle un cours dans l\'onglet <strong>Cours</strong>,<br>puis clique sur <strong>Générer la carte mentale</strong>.</div>';
+  document.getElementById('ficheActs').style.display = 'none';
+  document.getElementById('recList').innerHTML = '<p style="font-size:13px;color:var(--text2);">Aucun enregistrement pour l\'instant.</p>';
+  showTab('audio');
+  if (!SR) {
+    document.getElementById('warnAudio').style.display = 'block';
+    document.getElementById('warnDict').style.display = 'block';
+  }
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['audio','cours','fiche'][i] === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+/* ---- AUDIO RECORDING ---- */
+async function toggleAudioRec() { isAudioRec ? stopAudioRec() : await startAudioRec(); }
+
+async function startAudioRec() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRec = new MediaRecorder(stream);
+    audioChunks = [];
+    mediaRec.ondataavailable = e => audioChunks.push(e.data);
+    mediaRec.onstop = () => saveAudioRec(stream);
+    mediaRec.start();
+    isAudioRec = true; recSecs = 0;
+    recTimer = setInterval(() => { recSecs++; document.getElementById('recStatus').textContent = 'Enregistrement en cours… ' + fmt(recSecs); }, 1000);
+    document.getElementById('recBtn').classList.add('active');
+    document.getElementById('recLabel').textContent = 'Arrêter l\'enregistrement';
+    document.getElementById('recIco').className = 'ti ti-microphone-off';
+    document.getElementById('recStatus').textContent = 'Enregistrement en cours… 0:00';
+  } catch(e) {
+    document.getElementById('recStatus').textContent = 'Accès au micro refusé.';
+  }
+}
+
+function stopAudioRec() {
+  clearInterval(recTimer); isAudioRec = false;
+  mediaRec && mediaRec.stop();
+  document.getElementById('recBtn').classList.remove('active');
+  document.getElementById('recLabel').textContent = 'Démarrer l\'enregistrement';
+  document.getElementById('recIco').className = 'ti ti-microphone';
+}
+
+function saveAudioRec(stream) {
+  stream.getTracks().forEach(t => t.stop());
+  const blob = new Blob(audioChunks, { type: 'audio/webm' });
+  const url = URL.createObjectURL(blob);
+  const num = recordings.length + 1;
+  recordings.push({ url, blob, dur: recSecs, name: 'Cours ' + num });
+  renderRecList();
+  document.getElementById('recStatus').textContent = 'Enregistrement ' + num + ' sauvegardé (' + fmt(recSecs) + ').';
+  toast('Enregistrement sauvegardé', 'ok');
+}
+
+function renderRecList() {
+  const el = document.getElementById('recList');
+  if (!recordings.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text2);">Aucun enregistrement pour l\'instant.</p>'; return; }
+  el.innerHTML = recordings.map((r, i) => `
+    <div class="rec-item">
+      <div class="rec-meta"><span class="rec-name">${r.name}</span><span class="rec-dur">${fmt(r.dur)}</span></div>
+      <audio controls src="${r.url}"></audio>
+      <div class="rec-actions">
+        <button class="icon-btn" onclick="dlRec(${i})" title="Télécharger"><i class="ti ti-download"></i></button>
+        <button class="icon-btn danger" onclick="delRec(${i})" title="Supprimer"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+function dlRec(i) { const r = recordings[i]; const a = document.createElement('a'); a.href = r.url; a.download = r.name.replace(' ','_') + '.webm'; a.click(); }
+function delRec(i) { recordings.splice(i, 1); recordings.forEach((r, j) => r.name = 'Cours ' + (j+1)); renderRecList(); }
+function fmt(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+
+/* ---- DICTÉE ---- */
+function toggleDict() { isDicting ? stopDict() : startDict(); }
+
+function startDict() {
+  if (!SR) return;
+  finalT = document.getElementById('coursTA').value.trim();
+  if (finalT && !finalT.endsWith(' ')) finalT += ' ';
+  const r = new SR(); dictRec = r;
+  r.lang = 'fr-FR'; r.interimResults = true; r.continuous = true;
+  r.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      e.results[i].isFinal ? finalT += t + ' ' : interim += t;
+    }
+    document.getElementById('coursTA').value = finalT + interim;
+  };
+  r.onerror = () => stopDict();
+  r.onend = () => { if (isDicting) r.start(); };
+  r.start(); isDicting = true;
+  document.getElementById('dictBtn').classList.add('rec');
+  document.getElementById('dictLabel').textContent = 'Arrêter la dictée';
+  document.getElementById('dictIco').className = 'ti ti-microphone-off';
+  document.getElementById('dictDot').style.display = 'block';
+  document.getElementById('dictStatus').textContent = 'Écoute en cours… Parle normalement.';
+}
+
+function stopDict() {
+  isDicting = false; dictRec && dictRec.stop();
+  document.getElementById('dictBtn').classList.remove('rec');
+  document.getElementById('dictLabel').textContent = 'Dicter le cours';
+  document.getElementById('dictIco').className = 'ti ti-microphone';
+  document.getElementById('dictDot').style.display = 'none';
+  document.getElementById('dictStatus').textContent = 'Dictée arrêtée. Tu peux relire et corriger.';
+}
+
+function toggleDys() {
+  isDys = !isDys;
+  document.getElementById('coursTA').classList.toggle('dys', isDys);
+  document.getElementById('togDys').classList.toggle('on', isDys);
+}
+function toggleBig() {
+  isBig = !isBig;
+  document.getElementById('coursTA').classList.toggle('big', isBig);
+  document.getElementById('togBig').classList.toggle('on', isBig);
+}
+function copyCours() {
+  const t = document.getElementById('coursTA').value; if (!t) return;
+  navigator.clipboard.writeText(t).then(() => {
+    document.getElementById('cpyLbl').textContent = 'Copié !';
+    document.getElementById('cpyIco').className = 'ti ti-check';
+    setTimeout(() => { document.getElementById('cpyLbl').textContent = 'Copier'; document.getElementById('cpyIco').className = 'ti ti-copy'; }, 2000);
+  });
+}
+function dlCours() {
+  const t = document.getElementById('coursTA').value; if (!t) return;
+  const title = document.getElementById('chapTitle').value.replace(/\s+/g,'_') || 'cours';
+  dlBlob(t, title + '_integral.txt');
+}
+function clearCours() {
+  finalT = ''; document.getElementById('coursTA').value = '';
+  document.getElementById('dictStatus').textContent = 'Texte effacé.';
+}
+function dlBlob(c, n) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], {type:'text/plain'})); a.download = n; a.click(); }
+
+/* ---- CARTE MENTALE ---- */
+async function genFiche() {
+  const txt = document.getElementById('coursTA').value.trim();
+  if (!txt) { toast('Écris ou dicte un cours d\'abord !', 'err'); showTab('cours'); return; }
+  showTab('fiche');
+  document.getElementById('ficheZone').innerHTML = '';
+  document.getElementById('ficheActs').style.display = 'none';
+  const lr = document.getElementById('loadRow'); lr.style.display = 'flex';
+  const msgs = ['L\'IA lit le cours…','Identification des grands thèmes…','Construction des branches…','Finalisation de la carte…'];
+  let mi = 0; const iv = setInterval(() => { mi = (mi+1)%msgs.length; document.getElementById('loadMsg').textContent = msgs[mi]; }, 1800);
+  const title = document.getElementById('chapTitle').value.trim();
+  const sub   = document.getElementById('chapSub').value.trim();
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: `Tu es un assistant pédagogique pour une élève de 15 ans dyslexique. Matière : ${currentSubj.label}. Chapitre : ${title}${sub ? ' – ' + sub : ''}.
+
+Crée une carte mentale structurée à partir du cours. Réponds UNIQUEMENT en JSON valide, sans backticks ni texte autour.
+
+{
+  "titre": "${title}",
+  "sous_titre": "${sub}",
+  "branches": [
+    {"titre": "Nom de la branche", "points": ["point court 1", "point court 2"]}
+  ],
+  "mots_cles": ["mot1", "mot2", "mot3"]
+}
+
+Règles : 3 à 5 branches, 2 à 4 points courts par branche (phrases très simples), 5 à 8 mots-clés essentiels.
+
+Cours :
+${txt.substring(0, 3000)}`
+        }]
+      })
+    });
+    clearInterval(iv);
+    const data = await resp.json();
+    const raw = data.content.find(b => b.type === 'text')?.text || '';
+    let parsed;
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
+    catch { throw new Error('parse'); }
+    renderMind(parsed);
+  } catch(e) {
+    clearInterval(iv); lr.style.display = 'none';
+    document.getElementById('ficheZone').innerHTML = `<div style="padding:14px;border-radius:var(--radius);background:#FCEBEB;border:0.5px solid #E24B4A;color:#A32D2D;font-size:13px;"><i class="ti ti-alert-circle"></i> Erreur de génération. Vérifie ta connexion et réessaie.</div>`;
+  }
+}
+
+function renderMind(d) {
+  document.getElementById('loadRow').style.display = 'none';
+  const dc = isDys ? ' dys' : '';
+  let html = `<div class="mind-center"><div class="mind-node"><div>${d.titre}</div>${d.sous_titre ? `<div class="mind-node-sub">${d.sous_titre}</div>` : ''}</div></div>`;
+  html += '<div class="branches">';
+  (d.branches || []).forEach((b, i) => {
+    const pal = PALETTES[i % PALETTES.length];
+    const ico = ICONS[i % ICONS.length];
+    html += `<div class="branch ${pal}"><div class="branch-head"><i class="ti ${ico}"></i>${b.titre}</div><div class="branch-body${dc}"><ul>${(b.points||[]).map(p => `<li>${p}</li>`).join('')}</ul></div></div>`;
+  });
+  html += '</div>';
+  if (d.mots_cles && d.mots_cles.length) {
+    html += `<div class="branch"><div class="branch-head" style="background:#F1EFE8;color:#444441;"><i class="ti ti-tags"></i> Mots-clés à retenir</div><div class="mots-wrap">${d.mots_cles.map(m => `<span class="mot">${m}</span>`).join('')}</div></div>`;
+  }
+  document.getElementById('ficheZone').innerHTML = html;
+  document.getElementById('ficheActs').style.display = 'flex';
+  toast('Carte mentale générée !', 'ok');
+}
+
+function dlFiche() {
+  const title = document.getElementById('chapTitle').value.replace(/\s+/g,'_') || 'cours';
+  dlBlob(document.getElementById('ficheZone').innerText, title + '_carte_mentale.txt');
+}
+
+/* ---- TOAST ---- */
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+buildSubjGrid();
+</script>
+</body>
+</html>
