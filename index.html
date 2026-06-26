@@ -7,74 +7,94 @@
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-:root{--bg:#fff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a18;--text2:#6b6a65;--text3:#a09f9a;--border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);--radius:10px;--radius-lg:14px;--font:'Inter',sans-serif;--font-dys:'Lexend',sans-serif;}
+:root{--bg:#fff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a18;--text2:#6b6a65;--text3:#a09f9a;--border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);--radius:10px;--radius-lg:14px;--font:'Inter',sans-serif;--font-dys:'Lexend',sans-serif;--green:#1D9E75;--green-bg:#E1F5EE;--green-border:#5DCAA5;--red:#E24B4A;--red-bg:#FCEBEB;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:100vh;}
-.header{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;}
+
+/* HEADER */
+.header{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200;}
 .header-logo{font-size:16px;font-weight:500;display:flex;align-items:center;gap:8px;}
-.header-logo i{font-size:20px;color:#1D9E75;}
-.container{max-width:720px;margin:0 auto;padding:20px 14px 80px;}
+.header-logo i{font-size:20px;color:var(--green);}
+#headerBadge{display:none;font-size:11px;font-weight:500;}
+
+/* CONTAINER */
+.container{max-width:720px;margin:0 auto;padding:20px 14px 100px;}
 .screen{display:none;}.screen.active{display:block;}
+
+/* MATIÈRES */
 .screen-title{font-size:15px;font-weight:500;margin-bottom:4px;}
 .screen-sub{font-size:13px;color:var(--text2);margin-bottom:16px;}
 .subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-.subj-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--radius-lg);border:0.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;font-weight:500;color:var(--text);transition:all .15s;}
+.subj-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;border-radius:var(--radius-lg);border:0.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;font-weight:500;color:var(--text);transition:all .15s;position:relative;}
 .subj-btn:active{opacity:0.7;}
 .subj-btn i{font-size:24px;}
+.subj-count{position:absolute;top:6px;right:8px;font-size:10px;background:var(--green);color:#fff;border-radius:10px;padding:1px 6px;font-weight:500;}
+
+/* HISTORIQUE */
+.history-section{margin-bottom:20px;}
+.history-title{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+.history-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;}
+.history-item:active{opacity:0.7;}
+.history-badge{padding:3px 8px;border-radius:12px;font-size:11px;font-weight:500;flex-shrink:0;}
+.history-info{flex:1;min-width:0;}
+.history-name{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.history-date{font-size:11px;color:var(--text2);}
+.history-del{padding:6px;border-radius:var(--radius);border:none;background:transparent;cursor:pointer;color:var(--text3);font-size:16px;}
+
+/* FORMS */
 .back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 0;font-size:13px;color:var(--text2);background:none;border:none;cursor:pointer;margin-bottom:14px;}
 .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;}
 .form-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px;}
 .form-input{width:100%;padding:12px 13px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:15px;font-family:var(--font);outline:none;}
-.form-input:focus{border-color:#1D9E75;}
+.form-input:focus{border-color:var(--green);}
 .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:12px;}
-.tabs{display:flex;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:3px;gap:3px;margin-bottom:14px;}
-.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;border:none;background:transparent;color:var(--text2);cursor:pointer;border-radius:9px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px;}
+
+/* TABS */
+.tabs{display:flex;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:3px;gap:2px;margin-bottom:14px;overflow-x:auto;}
+.tab{flex:1;min-width:0;padding:9px 4px;font-size:11px;font-weight:500;border:none;background:transparent;color:var(--text2);cursor:pointer;border-radius:9px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap;}
 .tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08);}
 .panel{display:none;}.panel.active{display:block;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);font-size:14px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font);transition:all .15s;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 16px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;font-weight:500;cursor:pointer;color:var(--text);font-family:var(--font);transition:all .15s;}
 .btn:active{opacity:0.7;}
-.btn.primary{background:#E1F5EE;border-color:#1D9E75;color:#0F6E56;}
-.btn.danger{border-color:#E24B4A;color:#A32D2D;}
-.btn.full{width:100%;padding:14px;}
+.btn.primary{background:var(--green-bg);border-color:var(--green-border);color:#0F6E56;}
+.btn.danger{border-color:var(--red);color:#A32D2D;}
+.btn.full{width:100%;padding:14px;font-size:14px;}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
 
-/* GROS BOUTON MICRO */
-.mic-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px 0;}
-.mic-btn{width:100px;height:100px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:40px;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
-.mic-btn.idle{background:#1D9E75;color:#fff;}
-.mic-btn.idle:active{background:#0F6E56;}
-.mic-btn.recording{background:#E24B4A;color:#fff;animation:pulse 1.5s infinite;}
+/* MIC */
+.mic-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 0;}
+.mic-btn{width:90px;height:90px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:36px;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+.mic-btn.idle{background:var(--green);color:#fff;}
+.mic-btn.recording{background:var(--red);color:#fff;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{box-shadow:0 4px 20px rgba(226,75,74,0.3)}50%{box-shadow:0 4px 40px rgba(226,75,74,0.6)}}
 .mic-label{font-size:14px;font-weight:500;color:var(--text2);}
-.mic-timer{font-size:28px;font-weight:500;color:var(--text);font-variant-numeric:tabular-nums;}
+.mic-timer{font-size:26px;font-weight:500;color:var(--text);font-variant-numeric:tabular-nums;display:none;}
 .mic-hint{font-size:12px;color:var(--text3);text-align:center;max-width:240px;}
+.live-box{padding:12px 14px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--bg);font-size:15px;line-height:1.9;min-height:70px;color:var(--text2);font-style:italic;margin-bottom:12px;word-break:break-word;}
+.live-box.active{border-color:var(--green);color:var(--text);font-style:normal;}
+.section-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:14px;}
 
-/* LIVE BOX */
-.live-box{padding:14px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--bg);font-size:15px;line-height:1.9;min-height:80px;color:var(--text2);font-style:italic;margin-bottom:14px;word-break:break-word;}
-.live-box.active{border-color:#1D9E75;color:var(--text);font-style:normal;}
-
-/* AUDIO LIST */
-.section-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:16px;}
-.rec-item{display:flex;flex-direction:column;gap:8px;padding:12px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg);margin-bottom:8px;}
-.rec-top{display:flex;align-items:center;justify-content:space-between;}
-.rec-name{font-size:13px;font-weight:500;}
-.rec-dur{font-size:12px;color:var(--text2);}
-.rec-item audio{width:100%;height:36px;}
-.icon-btn{padding:8px;border-radius:var(--radius);border:0.5px solid var(--border);background:transparent;cursor:pointer;color:var(--text2);font-size:16px;display:flex;align-items:center;}
+/* TTS */
+.tts-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:10px;flex-wrap:wrap;}
+.tts-bar select{padding:5px 8px;border-radius:6px;border:0.5px solid var(--border2);background:var(--bg);font-size:12px;font-family:var(--font);color:var(--text);flex:1;}
+.tts-speed{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);}
+.tts-speed input{width:80px;}
 
 /* COURS */
 .opts-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-.tog{font-size:12px;padding:7px 14px;border-radius:20px;border:0.5px solid var(--border2);background:var(--bg);cursor:pointer;color:var(--text2);font-family:var(--font);}
-.tog.on{background:#E1F5EE;border-color:#1D9E75;color:#0F6E56;font-weight:500;}
+.tog{font-size:12px;padding:7px 12px;border-radius:20px;border:0.5px solid var(--border2);background:var(--bg);cursor:pointer;color:var(--text2);font-family:var(--font);}
+.tog.on{background:var(--green-bg);border-color:var(--green-border);color:#0F6E56;font-weight:500;}
 .textarea{width:100%;min-height:200px;padding:14px;border:0.5px solid var(--border);border-radius:var(--radius-lg);background:var(--bg);color:var(--text);font-size:16px;line-height:2;resize:vertical;outline:none;font-family:var(--font);}
 .textarea.dys{font-family:var(--font-dys);letter-spacing:.05em;word-spacing:.18em;}
 .textarea.big{font-size:20px;}
 
 /* CARTE */
-.mind-empty{text-align:center;padding:3rem 1rem;color:var(--text2);font-size:14px;}
-.mind-empty i{font-size:40px;display:block;margin-bottom:12px;color:var(--text3);}
-.mind-center{display:flex;justify-content:center;margin-bottom:18px;}
-.mind-node{padding:12px 20px;border-radius:30px;background:#EEEDFE;border:0.5px solid #AFA9EC;font-size:14px;font-weight:500;color:#3C3489;text-align:center;}
+.mind-empty{text-align:center;padding:2.5rem 1rem;color:var(--text2);font-size:14px;}
+.mind-empty i{font-size:36px;display:block;margin-bottom:10px;color:var(--text3);}
+.mind-center{display:flex;justify-content:center;margin-bottom:16px;}
+.mind-node{padding:10px 18px;border-radius:30px;background:#EEEDFE;border:0.5px solid #AFA9EC;font-size:14px;font-weight:500;color:#3C3489;text-align:center;}
 .mind-node-sub{font-size:12px;color:#7F77DD;margin-top:3px;}
 .branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
 .branch{border-radius:var(--radius-lg);border:0.5px solid var(--border);overflow:hidden;}
@@ -89,20 +109,67 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
 .b-blue .branch-head{background:#E6F1FB;color:#0C447C;}
 .mots-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:10px 11px;background:var(--bg);}
 .mot{padding:4px 10px;border-radius:20px;background:#FAEEDA;color:#633806;font-size:12px;font-weight:500;border:0.5px solid #EF9F27;}
+
+/* QUIZ */
+.quiz-empty{text-align:center;padding:2rem 1rem;color:var(--text2);font-size:14px;}
+.quiz-progress{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.quiz-bar-wrap{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.quiz-bar{height:6px;background:var(--green);border-radius:3px;transition:width .3s;}
+.quiz-num{font-size:12px;color:var(--text2);white-space:nowrap;}
+.quiz-score{font-size:13px;font-weight:500;color:var(--green);}
+.quiz-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px;}
+.quiz-question{font-size:15px;font-weight:500;line-height:1.7;margin-bottom:16px;}
+.quiz-question.dys{font-family:var(--font-dys);letter-spacing:.04em;}
+.quiz-choices{display:flex;flex-direction:column;gap:8px;}
+.quiz-choice{padding:12px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);font-size:14px;cursor:pointer;text-align:left;font-family:var(--font);transition:all .15s;line-height:1.5;}
+.quiz-choice:active{opacity:0.7;}
+.quiz-choice.correct{background:#E1F5EE;border-color:var(--green);color:#0F6E56;font-weight:500;}
+.quiz-choice.wrong{background:var(--red-bg);border-color:var(--red);color:#A32D2D;}
+.quiz-choice.dys{font-family:var(--font-dys);letter-spacing:.04em;}
+.quiz-explication{padding:12px;border-radius:var(--radius);background:var(--bg2);font-size:13px;line-height:1.7;margin-top:10px;color:var(--text2);display:none;}
+.quiz-explication.show{display:block;}
+.quiz-result{text-align:center;padding:2rem 1rem;}
+.quiz-result-score{font-size:48px;font-weight:500;color:var(--green);}
+.quiz-result-msg{font-size:15px;color:var(--text2);margin-top:8px;}
+
+/* POMODORO */
+.pomo-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px 0;}
+.pomo-circle{width:160px;height:160px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--green);background:var(--bg);transition:border-color .3s;}
+.pomo-circle.break{border-color:#85B7EB;}
+.pomo-circle.done{border-color:#EF9F27;}
+.pomo-time{font-size:36px;font-weight:500;font-variant-numeric:tabular-nums;}
+.pomo-phase{font-size:12px;color:var(--text2);margin-top:4px;}
+.pomo-sessions{display:flex;gap:6px;margin-top:4px;}
+.pomo-dot{width:10px;height:10px;border-radius:50%;background:var(--bg3);border:1.5px solid var(--border2);}
+.pomo-dot.done{background:var(--green);border-color:var(--green);}
+.pomo-controls{display:flex;gap:10px;}
+.pomo-settings{display:flex;gap:12px;font-size:13px;color:var(--text2);align-items:center;flex-wrap:wrap;justify-content:center;}
+.pomo-settings label{display:flex;align-items:center;gap:5px;}
+.pomo-settings input{width:50px;padding:4px 8px;border-radius:6px;border:0.5px solid var(--border2);font-size:13px;text-align:center;}
+
+/* SPINNER/LOAD */
 .load-row{display:none;align-items:center;gap:10px;font-size:13px;color:var(--text2);padding:14px 0;}
-.spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:#1D9E75;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+.spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap;max-width:90vw;text-align:center;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap;max-width:90vw;text-align:center;}
 .toast.show{opacity:1;}
-.toast.ok{background:#E1F5EE;color:#0F6E56;border:0.5px solid #1D9E75;}
-.toast.err{background:#FCEBEB;color:#A32D2D;border:0.5px solid #E24B4A;}
+.toast.ok{background:var(--green-bg);color:#0F6E56;border:0.5px solid var(--green-border);}
+.toast.err{background:var(--red-bg);color:#A32D2D;border:0.5px solid var(--red);}
+.toast.info{background:#E6F1FB;color:#0C447C;border:0.5px solid #85B7EB;}
+
 .work-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.icon-btn{padding:8px;border-radius:var(--radius);border:0.5px solid var(--border);background:transparent;cursor:pointer;color:var(--text2);font-size:16px;display:flex;align-items:center;}
+.icon-btn:active{opacity:0.7;}
+
+@media(min-width:500px){.subject-grid{grid-template-columns:repeat(4,1fr);}.branches{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}}
 </style>
 </head>
 <body>
 <div class="header">
   <div class="header-logo"><i class="ti ti-brain"></i> MonCours</div>
-  <div id="headerBadge" style="display:none;font-size:11px;font-weight:500;"></div>
+  <div id="headerBadge"></div>
 </div>
 <div id="toast" class="toast"></div>
 <div class="container">
@@ -110,8 +177,12 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
   <!-- MATIÈRES -->
   <div class="screen active" id="screen-subjects">
     <p class="screen-title">Bonjour ! Quelle matière ?</p>
-    <p class="screen-sub">Choisis pour commencer.</p>
+    <p class="screen-sub">Choisis pour commencer ou reprendre un chapitre.</p>
     <div class="subject-grid" id="subjGrid"></div>
+    <div class="history-section" id="historySection" style="display:none;">
+      <div class="history-title">Chapitres récents</div>
+      <div id="historyList"></div>
+    </div>
   </div>
 
   <!-- CHAPITRE -->
@@ -135,12 +206,14 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
   <div class="screen" id="screen-work">
     <div class="work-header">
       <button class="back-btn" style="margin:0;" onclick="goBack('chapter')"><i class="ti ti-arrow-left"></i> Modifier</button>
-      <div id="chapterInfo" style="font-size:13px;font-weight:500;color:var(--text2);"></div>
+      <div id="chapterInfo" style="font-size:12px;font-weight:500;color:var(--text2);"></div>
     </div>
-    <div class="tabs">
+    <div class="tabs" id="workTabs">
       <button class="tab active" onclick="showTab('rec')"><i class="ti ti-microphone"></i> Écoute</button>
       <button class="tab" onclick="showTab('cours')"><i class="ti ti-file-text"></i> Cours</button>
-      <button class="tab" onclick="showTab('fiche')"><i class="ti ti-hierarchy"></i> Carte</button>
+      <button class="tab" onclick="showTab('carte')"><i class="ti ti-hierarchy"></i> Carte</button>
+      <button class="tab" onclick="showTab('quiz')"><i class="ti ti-help"></i> Quiz</button>
+      <button class="tab" onclick="showTab('pomo')"><i class="ti ti-clock"></i> Timer</button>
     </div>
 
     <!-- ÉCOUTE -->
@@ -149,16 +222,21 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
         <button class="mic-btn idle" id="micBtn" onclick="toggleRec()">
           <i class="ti ti-microphone" id="micIco"></i>
         </button>
-        <div class="mic-timer" id="micTimer" style="display:none;">0:00</div>
+        <div class="mic-timer" id="micTimer">0:00</div>
         <div class="mic-label" id="micLabel">Appuie pour dicter</div>
-        <div class="mic-hint" id="micHint">Audio enregistré + texte transcrit automatiquement dans Cours</div>
+        <div class="mic-hint">Le texte est transcrit en direct dans Cours</div>
       </div>
-
-      <div style="font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;">Transcription en direct</div>
+      <!-- TTS -->
+      <div class="tts-bar">
+        <button class="btn" id="ttsBtn" onclick="toggleTTS()" style="padding:8px 12px;font-size:12px;"><i class="ti ti-volume" id="ttsIco"></i> Lire le cours</button>
+        <div class="tts-speed">
+          <span>Vitesse</span>
+          <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="ttsSpeed" style="width:70px;">
+          <span id="ttsSpeedVal">0.9x</span>
+        </div>
+      </div>
+      <div class="section-label">Transcription en direct</div>
       <div class="live-box" id="liveBox">Parle après avoir appuyé sur le bouton…</div>
-
-      <div class="section-label">Enregistrements audio</div>
-      <div id="recList"><p style="font-size:13px;color:var(--text2);">Aucun enregistrement.</p></div>
     </div>
 
     <!-- COURS -->
@@ -167,28 +245,62 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
         <button class="tog on" id="togDys" onclick="toggleDys()"><i class="ti ti-typography"></i> Lexend</button>
         <button class="tog" id="togBig" onclick="toggleBig()"><i class="ti ti-zoom-in"></i> Grand</button>
       </div>
+      <!-- TTS dans cours aussi -->
+      <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="btn" onclick="toggleTTS()" style="padding:8px 12px;font-size:12px;"><i class="ti ti-volume" id="ttsIco2"></i> <span id="ttsBtnLbl">Lire à voix haute</span></button>
+        <span style="font-size:12px;color:var(--text2);">Vitesse : <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="ttsSpeed2" style="width:60px;vertical-align:middle;"> <span id="ttsSpeedVal2">0.9x</span></span>
+      </div>
       <textarea class="textarea dys" id="coursTA" placeholder="Le cours transcrit apparaît ici. Tu peux aussi coller un texte."></textarea>
       <div class="btn-row">
-        <button class="btn primary" onclick="genFiche()"><i class="ti ti-sparkles"></i> Générer la carte</button>
+        <button class="btn primary" onclick="genCarte()"><i class="ti ti-sparkles"></i> Générer la carte</button>
+        <button class="btn primary" onclick="genQuiz()"><i class="ti ti-help"></i> Générer le quiz</button>
         <button class="btn" onclick="copyCours()"><i class="ti ti-copy" id="cpyIco"></i> <span id="cpyLbl">Copier</span></button>
         <button class="btn" onclick="dlCours()"><i class="ti ti-download"></i> .txt</button>
         <button class="btn danger" onclick="clearCours()"><i class="ti ti-trash"></i> Effacer</button>
       </div>
     </div>
 
-    <!-- CARTE -->
-    <div class="panel" id="panel-fiche">
-      <div class="load-row" id="loadRow"><div class="spinner"></div><span id="loadMsg">L'IA analyse…</span></div>
-      <div id="ficheZone">
-        <div class="mind-empty"><i class="ti ti-sitemap"></i>Dicte un cours puis clique sur <strong>Générer la carte</strong>.</div>
-      </div>
-      <div class="btn-row" id="ficheActs" style="display:none;">
-        <button class="btn" onclick="dlFiche()"><i class="ti ti-download"></i> Télécharger</button>
+    <!-- CARTE MENTALE -->
+    <div class="panel" id="panel-carte">
+      <div class="load-row" id="loadCarte"><div class="spinner"></div><span id="loadCarteMsg">Génération…</span></div>
+      <div id="carteZone"><div class="mind-empty"><i class="ti ti-sitemap"></i>Dicte un cours puis clique sur <strong>Générer la carte</strong>.</div></div>
+      <div class="btn-row" id="carteActs" style="display:none;">
+        <button class="btn" onclick="dlCarte()"><i class="ti ti-download"></i> Télécharger</button>
       </div>
     </div>
-  </div>
 
+    <!-- QUIZ -->
+    <div class="panel" id="panel-quiz">
+      <div class="load-row" id="loadQuiz"><div class="spinner"></div><span id="loadQuizMsg">Génération du quiz…</span></div>
+      <div id="quizZone"><div class="quiz-empty"><i class="ti ti-help" style="font-size:36px;display:block;margin-bottom:10px;color:var(--text3);"></i>Dicte un cours puis clique sur <strong>Générer le quiz</strong> dans l'onglet Cours.</div></div>
+    </div>
+
+    <!-- POMODORO -->
+    <div class="panel" id="panel-pomo">
+      <div class="pomo-wrap">
+        <div class="pomo-circle" id="pomoCircle">
+          <div class="pomo-time" id="pomoTime">25:00</div>
+          <div class="pomo-phase" id="pomoPhase">Révision</div>
+        </div>
+        <div class="pomo-sessions" id="pomoSessions"></div>
+        <div class="pomo-controls">
+          <button class="btn primary" id="pomoBtn" onclick="togglePomo()"><i class="ti ti-player-play" id="pomoIco"></i> Démarrer</button>
+          <button class="btn" onclick="resetPomo()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+        <div class="pomo-settings">
+          <label>⏱ Révision <input type="number" id="pomoWork" value="25" min="1" max="60" onchange="resetPomo()"> min</label>
+          <label>☕ Pause <input type="number" id="pomoBreak" value="5" min="1" max="30" onchange="resetPomo()"> min</label>
+          <label>🔁 Sessions <input type="number" id="pomoSess" value="4" min="1" max="8" onchange="resetPomo()"></label>
+        </div>
+        <div style="font-size:13px;color:var(--text2);text-align:center;max-width:280px;">
+          Alterne entre révision et pause pour mémoriser efficacement. Après <span id="pomoSessNum">4</span> sessions → grande pause !
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /screen-work -->
 </div>
+
 <script>
 const SUBJECTS=[
   {id:'fr',   label:'Français',        icon:'ti-book',          color:'#EEEDFE',border:'#AFA9EC',text:'#3C3489'},
@@ -202,20 +314,75 @@ const SUBJECTS=[
   {id:'autre',label:'Autre',           icon:'ti-plus',           color:'#F1EFE8',border:'#D3D1C7',text:'#5F5E5A'},
 ];
 const PAL=['b-purple','b-teal','b-coral','b-amber','b-blue'];
-const ICO=['ti-bulb','ti-list','ti-star','ti-tag','ti-bookmark'];
+const ICONS_MAP=['ti-bulb','ti-list','ti-star','ti-tag','ti-bookmark'];
 
 let subj=null, isDys=true, isBig=false;
-let finalT='', isRec=false, recSecs=0, recTimer=null;
-let srRec=null, mediaRec=null, audioChunks=[], recordings=[];
+let finalT='', isRec=false, recSecs=0, recTimer=null, srRec=null;
+let quizData=[], quizIdx=0, quizScore=0, quizAnswered=false;
+let ttsUtt=null, ttsPlaying=false;
+let pomoTimer=null, pomoRunning=false, pomoSecs=0, pomoPhase='work', pomoSession=0;
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+function isMobile(){return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);}
 
-function buildGrid(){
-  document.getElementById('subjGrid').innerHTML=SUBJECTS.map(s=>`
-    <button class="subj-btn" onclick="selectSubj('${s.id}')" style="border-color:${s.border};">
-      <i class="ti ${s.icon}" style="color:${s.text};"></i><span>${s.label}</span>
-    </button>`).join('');
+/* ===== LOCALSTORAGE HISTORY ===== */
+function getHistory(){try{return JSON.parse(localStorage.getItem('moncours_history')||'[]');}catch{return[];}}
+function saveHistory(h){try{localStorage.setItem('moncours_history',JSON.stringify(h));}catch{}}
+function addToHistory(){
+  const title=document.getElementById('chapTitle').value.trim();
+  if(!title||!subj)return;
+  const sub=document.getElementById('chapSub').value.trim();
+  const cours=document.getElementById('coursTA').value.trim();
+  const h=getHistory().filter(x=>!(x.subjId===subj.id&&x.title===title));
+  h.unshift({subjId:subj.id,title,sub,cours,date:new Date().toLocaleDateString('fr-FR')});
+  saveHistory(h.slice(0,20));
 }
 
+function buildGrid(){
+  const h=getHistory();
+  document.getElementById('subjGrid').innerHTML=SUBJECTS.map(s=>{
+    const cnt=h.filter(x=>x.subjId===s.id).length;
+    return`<button class="subj-btn" onclick="selectSubj('${s.id}')" style="border-color:${s.border};">
+      ${cnt?`<span class="subj-count">${cnt}</span>`:''}
+      <i class="ti ${s.icon}" style="color:${s.text};"></i><span>${s.label}</span>
+    </button>`;
+  }).join('');
+  renderHistory();
+}
+
+function renderHistory(){
+  const h=getHistory();
+  const hs=document.getElementById('historySection');
+  const hl=document.getElementById('historyList');
+  if(!h.length){hs.style.display='none';return;}
+  hs.style.display='block';
+  hl.innerHTML=h.slice(0,5).map((x,i)=>{
+    const s=SUBJECTS.find(s=>s.id===x.subjId)||SUBJECTS[8];
+    return`<div class="history-item" onclick="loadHistory(${i})">
+      <span class="history-badge" style="background:${s.color};color:${s.text};border:0.5px solid ${s.border};">${s.label}</span>
+      <div class="history-info">
+        <div class="history-name">${x.title}${x.sub?' — '+x.sub:''}</div>
+        <div class="history-date">${x.date}</div>
+      </div>
+      <button class="history-del" onclick="event.stopPropagation();delHistory(${i})"><i class="ti ti-x"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function loadHistory(i){
+  const h=getHistory();
+  const x=h[i];
+  if(!x)return;
+  subj=SUBJECTS.find(s=>s.id===x.subjId)||SUBJECTS[8];
+  document.getElementById('chapTitle').value=x.title;
+  document.getElementById('chapSub').value=x.sub||'';
+  goToWork(x.cours);
+}
+
+function delHistory(i){
+  const h=getHistory(); h.splice(i,1); saveHistory(h); buildGrid();
+}
+
+/* ===== NAVIGATION ===== */
 function selectSubj(id){
   subj=SUBJECTS.find(s=>s.id===id);
   const b=document.getElementById('chapterBadge');
@@ -226,18 +393,22 @@ function selectSubj(id){
   showScreen('screen-chapter');
 }
 
-function goBack(to){showScreen('screen-'+to);}
+function goBack(to){
+  stopTTS(); stopRec(); stopPomo();
+  if(to==='subjects')buildGrid();
+  showScreen('screen-'+to);
+}
 
-function goToWork(){
+function goToWork(preloadCours=''){
   const title=document.getElementById('chapTitle').value.trim();
   if(!title){document.getElementById('chapTitle').focus();toast('Entre le titre','err');return;}
   const sub=document.getElementById('chapSub').value.trim();
   document.getElementById('chapterInfo').textContent=subj.label+' — '+title+(sub?' ('+sub+')':'');
   const hb=document.getElementById('headerBadge');
-  hb.style.display='block';
-  hb.textContent=subj.label;
   hb.style.cssText=`display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;background:${subj.color};border:0.5px solid ${subj.border};color:${subj.text};`;
-  resetWork();showScreen('screen-work');
+  hb.innerHTML=`<i class="ti ${subj.icon}"></i> ${subj.label}`;
+  resetWork(preloadCours);
+  showScreen('screen-work');
 }
 
 function showScreen(id){
@@ -245,176 +416,129 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-function resetWork(){
-  finalT='';isRec=false;recordings=[];
-  document.getElementById('coursTA').value='';
+function resetWork(preloadCours=''){
+  finalT=preloadCours;isRec=false;
+  document.getElementById('coursTA').value=preloadCours;
   document.getElementById('liveBox').textContent='Parle après avoir appuyé sur le bouton…';
   document.getElementById('liveBox').classList.remove('active');
-  document.getElementById('ficheZone').innerHTML='<div class="mind-empty"><i class="ti ti-sitemap"></i>Dicte un cours puis clique sur <strong>Générer la carte</strong>.</div>';
-  document.getElementById('ficheActs').style.display='none';
-  document.getElementById('recList').innerHTML='<p style="font-size:13px;color:var(--text2);">Aucun enregistrement.</p>';
-  // Adapter message selon mobile/PC
-  if(typeof isMobile === 'function' && isMobile()){
-    document.getElementById('micHint').textContent = 'Le texte est transcrit en direct dans Cours écrit (audio non disponible sur mobile)';
-  } else {
-    document.getElementById('micHint').textContent = 'Audio enregistré + texte transcrit automatiquement dans Cours';
-  }
+  document.getElementById('carteZone').innerHTML='<div class="mind-empty"><i class="ti ti-sitemap"></i>Dicte un cours puis clique sur <strong>Générer la carte</strong>.</div>';
+  document.getElementById('carteActs').style.display='none';
+  document.getElementById('quizZone').innerHTML='<div class="quiz-empty"><i class="ti ti-help" style="font-size:36px;display:block;margin-bottom:10px;color:var(--text3);"></i>Dicte un cours puis clique sur <strong>Générer le quiz</strong> dans l\'onglet Cours.</div>';
   document.getElementById('micBtn').className='mic-btn idle';
   document.getElementById('micIco').className='ti ti-microphone';
   document.getElementById('micLabel').textContent='Appuie pour dicter';
   document.getElementById('micTimer').style.display='none';
+  quizData=[];quizIdx=0;quizScore=0;
+  resetPomo();
   showTab('rec');
+  stopTTS();
 }
 
 function showTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['rec','cours','fiche'][i]===id));
+  const tabs=['rec','cours','carte','quiz','pomo'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
 }
 
-/* ======= ENREGISTREMENT ======= */
-async function toggleRec(){
-  isRec ? stopRec() : await startRec();
-}
+/* ===== DICTÉE ===== */
+async function toggleRec(){isRec?stopRec():await startRec();}
 
 async function startRec(){
-  if(!SR){
-    toast('Transcription non disponible sur cet appareil','err');
-    return;
-  }
-
-  // Sur Android : SpeechRecognition d'abord, puis MediaRecorder si possible
-  finalT = document.getElementById('coursTA').value.trim();
-  if(finalT && !finalT.endsWith(' ')) finalT+=' ';
-
-  // --- SpeechRecognition ---
-  srRec = new SR();
-  srRec.lang = 'fr-FR';
-  srRec.interimResults = true;
-  srRec.continuous = false; // Android Chrome: continuous=false obligatoire
-  srRec.maxAlternatives = 1;
-
-  srRec.onstart = () => {
-    // Lance MediaRecorder après que SR a démarré
-    startAudio();
-  };
-
-  srRec.onresult = (e) => {
-    let interim = '';
+  if(!SR){toast('Transcription non disponible','err');return;}
+  stopTTS();
+  finalT=document.getElementById('coursTA').value.trim();
+  if(finalT&&!finalT.endsWith(' '))finalT+=' ';
+  srRec=new SR();
+  srRec.lang='fr-FR';
+  srRec.interimResults=true;
+  srRec.continuous=false;
+  srRec.maxAlternatives=1;
+  srRec.onstart=()=>{};
+  srRec.onresult=(e)=>{
+    let interim='';
     for(let i=e.resultIndex;i<e.results.length;i++){
       const t=e.results[i][0].transcript;
-      if(e.results[i].isFinal){ finalT+=t+' '; }
-      else { interim+=t; }
+      if(e.results[i].isFinal)finalT+=t+' ';
+      else interim+=t;
     }
     const lb=document.getElementById('liveBox');
-    lb.textContent = (finalT+interim) || 'En attente…';
+    lb.textContent=(finalT+interim)||'En attente…';
     lb.classList.add('active');
-    document.getElementById('coursTA').value = finalT+interim;
+    document.getElementById('coursTA').value=finalT+interim;
   };
-
-  srRec.onerror = (e) => {
-    if(e.error==='no-speech') return;
-    if(e.error==='not-allowed'){
-      toast('Autorise le micro dans Chrome','err');
-      stopRec(); return;
-    }
-    console.warn('SR error:', e.error);
+  srRec.onerror=(e)=>{
+    if(e.error==='no-speech')return;
+    if(e.error==='not-allowed'){toast('Autorise le micro dans Chrome','err');stopRec();}
   };
-
-  srRec.onend = () => {
-    if(isRec){
-      // Délai court nécessaire sur Android Chrome
-      setTimeout(() => {
-        if(isRec){ try{ srRec.start(); }catch(err){} }
-      }, 200);
-    }
+  srRec.onend=()=>{
+    if(isRec)setTimeout(()=>{if(isRec)try{srRec.start();}catch(e){}},200);
   };
-
-  try {
-    srRec.start();
-  } catch(e) {
-    toast('Erreur démarrage micro : '+e.message,'err');
-    return;
-  }
-
-  isRec=true; recSecs=0;
-  recTimer=setInterval(()=>{
-    recSecs++;
-    document.getElementById('micTimer').textContent=fmt(recSecs);
-  },1000);
-
+  try{srRec.start();}catch(e){toast('Erreur micro','err');return;}
+  isRec=true;recSecs=0;
+  recTimer=setInterval(()=>{recSecs++;document.getElementById('micTimer').textContent=fmt(recSecs);},1000);
   document.getElementById('micBtn').className='mic-btn recording';
   document.getElementById('micIco').className='ti ti-player-stop';
   document.getElementById('micLabel').textContent='Appuie pour arrêter';
   document.getElementById('micTimer').style.display='block';
 }
 
-function isMobile(){
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-async function startAudio(){
-  // Sur mobile, le micro est déjà utilisé par SR → pas d'enregistrement simultané possible
-  if(isMobile()){
-    console.log('Mobile détecté : enregistrement audio désactivé (micro utilisé par SR)');
-    return;
-  }
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
-    mediaRec=new MediaRecorder(stream);
-    audioChunks=[];
-    mediaRec.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data);};
-    mediaRec.onstop=()=>saveAudio(stream);
-    mediaRec.start(500);
-  }catch(e){
-    console.warn('MediaRecorder non disponible:', e.message);
-  }
-}
-
 function stopRec(){
-  isRec=false;
-  clearInterval(recTimer);
-
-  if(srRec){ srRec.onend=null; try{srRec.stop();}catch(e){} srRec=null; }
-  if(mediaRec && mediaRec.state!=='inactive'){ try{mediaRec.stop();}catch(e){} }
-  else { renderRecList(); } // si pas d'audio, on met quand même à jour
-
+  isRec=false;clearInterval(recTimer);
+  if(srRec){srRec.onend=null;try{srRec.stop();}catch(e){}srRec=null;}
   document.getElementById('micBtn').className='mic-btn idle';
   document.getElementById('micIco').className='ti ti-microphone';
   document.getElementById('micLabel').textContent='Appuie pour dicter';
   document.getElementById('micTimer').style.display='none';
+  if(finalT.trim())addToHistory();
   toast('Terminé ! Vérifie l\'onglet Cours','ok');
 }
 
-function saveAudio(stream){
-  stream.getTracks().forEach(t=>t.stop());
-  const blob=new Blob(audioChunks,{type:'audio/webm'});
-  if(blob.size < 1000){ renderRecList(); return; } // trop petit, on ignore
-  const url=URL.createObjectURL(blob);
-  recordings.push({url,blob,dur:recSecs,name:'Cours '+(recordings.length+1)});
-  renderRecList();
+/* ===== TTS ===== */
+function toggleTTS(){
+  if(ttsPlaying)stopTTS();
+  else startTTS();
 }
-
-function renderRecList(){
-  const el=document.getElementById('recList');
-  if(!recordings.length){el.innerHTML='<p style="font-size:13px;color:var(--text2);">Aucun enregistrement.</p>';return;}
-  el.innerHTML=recordings.map((r,i)=>`
-    <div class="rec-item">
-      <div class="rec-top">
-        <div><span class="rec-name">${r.name}</span> <span class="rec-dur">${fmt(r.dur)}</span></div>
-        <div style="display:flex;gap:6px;">
-          <button class="icon-btn" onclick="dlRec(${i})"><i class="ti ti-download"></i></button>
-          <button class="icon-btn" onclick="delRec(${i})"><i class="ti ti-trash"></i></button>
-        </div>
-      </div>
-      <audio controls src="${r.url}"></audio>
-    </div>`).join('');
+function startTTS(){
+  const txt=document.getElementById('coursTA').value.trim();
+  if(!txt){toast('Pas de cours à lire','err');return;}
+  if(!window.speechSynthesis){toast('Lecture vocale non disponible','err');return;}
+  stopTTS();
+  ttsUtt=new SpeechSynthesisUtterance(txt);
+  ttsUtt.lang='fr-FR';
+  ttsUtt.rate=parseFloat(document.getElementById('ttsSpeed').value);
+  ttsUtt.onstart=()=>{
+    ttsPlaying=true;
+    document.getElementById('ttsIco').className='ti ti-player-stop';
+    document.getElementById('ttsIco2').className='ti ti-player-stop';
+    document.getElementById('ttsBtnLbl').textContent='Arrêter la lecture';
+  };
+  ttsUtt.onend=ttsUtt.onerror=()=>{
+    ttsPlaying=false;
+    document.getElementById('ttsIco').className='ti ti-volume';
+    document.getElementById('ttsIco2').className='ti ti-volume';
+    document.getElementById('ttsBtnLbl').textContent='Lire à voix haute';
+  };
+  window.speechSynthesis.speak(ttsUtt);
 }
+function stopTTS(){
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  ttsPlaying=false;
+  if(document.getElementById('ttsIco'))document.getElementById('ttsIco').className='ti ti-volume';
+  if(document.getElementById('ttsIco2'))document.getElementById('ttsIco2').className='ti ti-volume';
+  if(document.getElementById('ttsBtnLbl'))document.getElementById('ttsBtnLbl').textContent='Lire à voix haute';
+}
+['ttsSpeed','ttsSpeed2'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('input',function(){
+    const v=parseFloat(this.value).toFixed(1)+'x';
+    document.getElementById(id+'Val').textContent=v;
+    document.getElementById(id==='ttsSpeed'?'ttsSpeed2':'ttsSpeed').value=this.value;
+    document.getElementById(id==='ttsSpeed'?'ttsSpeedVal2':'ttsSpeedVal').textContent=v;
+    if(ttsUtt)ttsUtt.rate=parseFloat(this.value);
+  });
+});
 
-function dlRec(i){const r=recordings[i];const a=document.createElement('a');a.href=r.url;a.download='cours_'+(i+1)+'.webm';a.click();}
-function delRec(i){recordings.splice(i,1);recordings.forEach((r,j)=>r.name='Cours '+(j+1));renderRecList();}
-function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
-
+/* ===== COURS ===== */
 function toggleDys(){isDys=!isDys;document.getElementById('coursTA').classList.toggle('dys',isDys);document.getElementById('togDys').classList.toggle('on',isDys);}
 function toggleBig(){isBig=!isBig;document.getElementById('coursTA').classList.toggle('big',isBig);document.getElementById('togBig').classList.toggle('on',isBig);}
 function copyCours(){
@@ -425,58 +549,231 @@ function copyCours(){
   });
 }
 function dlCours(){const t=document.getElementById('coursTA').value;if(!t)return;dlBlob(t,'cours.txt');}
-function clearCours(){finalT='';document.getElementById('coursTA').value='';document.getElementById('liveBox').textContent='Parle après avoir appuyé sur le bouton…';document.getElementById('liveBox').classList.remove('active');}
+function clearCours(){
+  if(!confirm('Effacer tout le cours ?'))return;
+  finalT='';document.getElementById('coursTA').value='';
+  document.getElementById('liveBox').textContent='Parle après avoir appuyé sur le bouton…';
+  document.getElementById('liveBox').classList.remove('active');
+  stopTTS();
+}
 function dlBlob(c,n){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/plain'}));a.download=n;a.click();}
-function dlFiche(){dlBlob(document.getElementById('ficheZone').innerText,'fiche.txt');}
+function dlCarte(){dlBlob(document.getElementById('carteZone').innerText,'carte.txt');}
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
 
-async function genFiche(){
+/* ===== CARTE MENTALE ===== */
+async function genCarte(){
   const txt=document.getElementById('coursTA').value.trim();
-  if(!txt){toast('Dicte un cours d\'abord !','err');showTab('cours');return;}
-  showTab('fiche');
-  document.getElementById('ficheZone').innerHTML='';
-  document.getElementById('ficheActs').style.display='none';
-  const lr=document.getElementById('loadRow');lr.style.display='flex';
+  if(!txt){toast('Dicte un cours d\'abord !','err');return;}
+  showTab('carte');
+  document.getElementById('carteZone').innerHTML='';
+  document.getElementById('carteActs').style.display='none';
+  const lr=document.getElementById('loadCarte');lr.style.display='flex';
   const msgs=['Lecture du cours…','Identification des thèmes…','Construction…','Finalisation…'];
-  let mi=0;const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadMsg').textContent=msgs[mi];},1800);
+  let mi=0;const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadCarteMsg').textContent=msgs[mi];},1800);
   const title=document.getElementById('chapTitle').value.trim();
   const sub=document.getElementById('chapSub').value.trim();
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`Assistant pédagogique pour élève de 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
-Carte mentale en JSON uniquement, sans backticks.
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`Assistant pédagogique pour élève 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
+Carte mentale JSON uniquement, sans backticks.
 {"titre":"${title}","sous_titre":"${sub}","branches":[{"titre":"Branche","points":["point 1","point 2"]}],"mots_cles":["mot1","mot2"]}
-3-5 branches, 2-4 points courts, 5-8 mots-clés.
+3-5 branches, 2-4 points courts, 5-8 mots-clés simples.
 Cours: ${txt.substring(0,3000)}`}]})
     });
     clearInterval(iv);
     const data=await resp.json();
     const raw=data.content.find(b=>b.type==='text')?.text||'';
-    let parsed;try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch{throw new Error('parse');}
-    renderMind(parsed);
+    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch{throw new Error('parse');}
+    renderCarte(p);
   }catch(e){
     clearInterval(iv);lr.style.display='none';
-    document.getElementById('ficheZone').innerHTML=`<div style="padding:14px;border-radius:var(--radius);background:#FCEBEB;border:0.5px solid #E24B4A;color:#A32D2D;font-size:13px;">Erreur. Vérifie ta connexion.</div>`;
+    document.getElementById('carteZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur. Vérifie ta connexion.</div>`;
   }
 }
 
-function renderMind(d){
-  document.getElementById('loadRow').style.display='none';
+function renderCarte(d){
+  document.getElementById('loadCarte').style.display='none';
   const dc=isDys?' dys':'';
   let html=`<div class="mind-center"><div class="mind-node"><div>${d.titre}</div>${d.sous_titre?`<div class="mind-node-sub">${d.sous_titre}</div>`:''}</div></div>`;
   html+='<div class="branches">';
   (d.branches||[]).forEach((b,i)=>{
-    html+=`<div class="branch ${PAL[i%PAL.length]}"><div class="branch-head"><i class="ti ${ICO[i%ICO.length]}"></i>${b.titre}</div><div class="branch-body${dc}"><ul>${(b.points||[]).map(p=>`<li>${p}</li>`).join('')}</ul></div></div>`;
+    html+=`<div class="branch ${PAL[i%PAL.length]}"><div class="branch-head"><i class="ti ${ICONS_MAP[i%ICONS_MAP.length]}"></i>${b.titre}</div><div class="branch-body${dc}"><ul>${(b.points||[]).map(p=>`<li>${p}</li>`).join('')}</ul></div></div>`;
   });
   html+='</div>';
   if(d.mots_cles&&d.mots_cles.length)html+=`<div class="branch" style="grid-column:1/-1;"><div class="branch-head" style="background:#F1EFE8;color:#444441;"><i class="ti ti-tags"></i> Mots-clés</div><div class="mots-wrap">${d.mots_cles.map(m=>`<span class="mot">${m}</span>`).join('')}</div></div>`;
-  document.getElementById('ficheZone').innerHTML=html;
-  document.getElementById('ficheActs').style.display='flex';
+  document.getElementById('carteZone').innerHTML=html;
+  document.getElementById('carteActs').style.display='flex';
+  addToHistory();
   toast('Carte générée !','ok');
 }
 
+/* ===== QUIZ ===== */
+async function genQuiz(){
+  const txt=document.getElementById('coursTA').value.trim();
+  if(!txt){toast('Dicte un cours d\'abord !','err');return;}
+  showTab('quiz');
+  document.getElementById('quizZone').innerHTML='';
+  const lr=document.getElementById('loadQuiz');lr.style.display='flex';
+  const msgs=['Lecture du cours…','Création des questions…','Préparation des choix…'];
+  let mi=0;const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadQuizMsg').textContent=msgs[mi];},1800);
+  const title=document.getElementById('chapTitle').value.trim();
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`Crée un quiz de 5 questions QCM pour une élève de 15 ans dyslexique sur ce cours de ${subj.label} : "${title}".
+JSON uniquement, sans backticks :
+{"questions":[{"q":"Question ?","choix":["A","B","C","D"],"correct":0,"explication":"Explication courte."}]}
+correct = index du bon choix (0-3). Questions simples, réponses courtes.
+Cours: ${txt.substring(0,2500)}`}]})
+    });
+    clearInterval(iv);
+    const data=await resp.json();
+    const raw=data.content.find(b=>b.type==='text')?.text||'';
+    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch{throw new Error('parse');}
+    quizData=p.questions||[];
+    quizIdx=0;quizScore=0;
+    renderQuizQuestion();
+  }catch(e){
+    clearInterval(iv);lr.style.display='none';
+    document.getElementById('quizZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur. Vérifie ta connexion.</div>`;
+  }
+}
+
+function renderQuizQuestion(){
+  document.getElementById('loadQuiz').style.display='none';
+  if(quizIdx>=quizData.length){renderQuizResult();return;}
+  const q=quizData[quizIdx];
+  const pct=Math.round((quizIdx/quizData.length)*100);
+  const dc=isDys?' dys':'';
+  document.getElementById('quizZone').innerHTML=`
+    <div class="quiz-progress">
+      <div class="quiz-bar-wrap"><div class="quiz-bar" id="quizBar" style="width:${pct}%"></div></div>
+      <span class="quiz-num">${quizIdx+1}/${quizData.length}</span>
+      <span class="quiz-score">✓ ${quizScore}</span>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-question${dc}">${q.q}</div>
+      <div class="quiz-choices" id="quizChoices">
+        ${q.choix.map((c,i)=>`<button class="quiz-choice${dc}" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join('')}
+      </div>
+      <div class="quiz-explication" id="quizExp">${q.explication||''}</div>
+    </div>
+    <div id="quizNext" style="display:none;">
+      <button class="btn primary full" onclick="nextQuiz()">${quizIdx+1<quizData.length?'Question suivante →':'Voir mes résultats →'}</button>
+    </div>`;
+}
+
+function answerQuiz(chosen){
+  const q=quizData[quizIdx];
+  const btns=document.querySelectorAll('.quiz-choice');
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.correct)b.classList.add('correct');
+    else if(i===chosen)b.classList.add('wrong');
+  });
+  if(chosen===q.correct)quizScore++;
+  document.getElementById('quizExp').classList.add('show');
+  document.getElementById('quizNext').style.display='block';
+}
+
+function nextQuiz(){quizIdx++;renderQuizQuestion();}
+
+function renderQuizResult(){
+  const pct=Math.round((quizScore/quizData.length)*100);
+  const msg=pct>=80?'🎉 Excellent travail !':pct>=60?'👍 Bien, continue !':'💪 Révise encore un peu !';
+  document.getElementById('quizZone').innerHTML=`
+    <div class="quiz-result">
+      <div class="quiz-result-score">${quizScore}/${quizData.length}</div>
+      <div class="quiz-result-msg">${msg}</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:6px;">${pct}% de bonnes réponses</div>
+      <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn primary" onclick="quizIdx=0;quizScore=0;renderQuizQuestion()"><i class="ti ti-refresh"></i> Recommencer</button>
+        <button class="btn" onclick="genQuiz()"><i class="ti ti-sparkles"></i> Nouveau quiz</button>
+      </div>
+    </div>`;
+}
+
+/* ===== POMODORO ===== */
+function getPomoWork(){return parseInt(document.getElementById('pomoWork').value)||25;}
+function getPomoBreak(){return parseInt(document.getElementById('pomoBreak').value)||5;}
+function getPomoSess(){return parseInt(document.getElementById('pomoSess').value)||4;}
+
+function resetPomo(){
+  stopPomo();
+  pomoPhase='work';pomoSession=0;
+  pomoSecs=getPomoWork()*60;
+  updatePomoDisplay();
+  renderPomoSessions();
+  document.getElementById('pomoSessNum').textContent=getPomoSess();
+}
+
+function togglePomo(){pomoRunning?stopPomo():startPomo();}
+
+function startPomo(){
+  pomoRunning=true;
+  document.getElementById('pomoBtn').innerHTML='<i class="ti ti-player-pause"></i> Pause';
+  document.getElementById('pomoIco').className='ti ti-player-pause';
+  pomoTimer=setInterval(()=>{
+    pomoSecs--;
+    if(pomoSecs<=0){
+      clearInterval(pomoTimer);
+      if(pomoPhase==='work'){
+        pomoSession++;
+        renderPomoSessions();
+        if(pomoSession>=getPomoSess()){
+          pomoPhase='longbreak';
+          pomoSecs=15*60;
+          toast('🎉 Grande pause de 15 min méritée !','ok');
+          vibrate();
+        } else {
+          pomoPhase='break';
+          pomoSecs=getPomoBreak()*60;
+          toast('☕ Pause ! Repose-toi '+getPomoBreak()+' min','info');
+          vibrate();
+        }
+      } else {
+        pomoPhase='work';
+        if(pomoSession>=getPomoSess()){pomoSession=0;renderPomoSessions();}
+        pomoSecs=getPomoWork()*60;
+        toast('📚 Au travail ! Session '+(pomoSession+1)+'/'+getPomoSess(),'ok');
+        vibrate();
+      }
+      updatePomoDisplay();
+      startPomo();
+      return;
+    }
+    updatePomoDisplay();
+  },1000);
+}
+
+function stopPomo(){
+  pomoRunning=false;
+  clearInterval(pomoTimer);
+  if(document.getElementById('pomoBtn'))document.getElementById('pomoBtn').innerHTML='<i class="ti ti-player-play"></i> Démarrer';
+}
+
+function updatePomoDisplay(){
+  document.getElementById('pomoTime').textContent=fmt(pomoSecs);
+  const phaseLabels={work:'📚 Révision',break:'☕ Pause',longbreak:'🎉 Grande pause'};
+  document.getElementById('pomoPhase').textContent=phaseLabels[pomoPhase]||'Révision';
+  const c=document.getElementById('pomoCircle');
+  c.className='pomo-circle'+(pomoPhase==='break'||pomoPhase==='longbreak'?' break':'');
+}
+
+function renderPomoSessions(){
+  const total=getPomoSess();
+  document.getElementById('pomoSessions').innerHTML=Array.from({length:total},(_,i)=>`<div class="pomo-dot${i<pomoSession?' done':''}"></div>`).join('');
+}
+
+function vibrate(){if(navigator.vibrate)navigator.vibrate([200,100,200]);}
+
+/* ===== UTILS ===== */
 function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.className='toast',3000);}
+
+/* ===== INIT ===== */
 buildGrid();
+resetPomo();
 </script>
 </body>
 </html>
