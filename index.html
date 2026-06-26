@@ -285,7 +285,7 @@ async function startRec(){
   srRec = new SR();
   srRec.lang = 'fr-FR';
   srRec.interimResults = true;
-  srRec.continuous = true;
+  srRec.continuous = false; // Android Chrome: continuous=false obligatoire
   srRec.maxAlternatives = 1;
 
   srRec.onstart = () => {
@@ -316,7 +316,12 @@ async function startRec(){
   };
 
   srRec.onend = () => {
-    if(isRec){ try{ srRec.start(); }catch(err){} }
+    if(isRec){
+      // Délai court nécessaire sur Android Chrome
+      setTimeout(() => {
+        if(isRec){ try{ srRec.start(); }catch(err){} }
+      }, 200);
+    }
   };
 
   try {
