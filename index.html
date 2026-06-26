@@ -637,7 +637,7 @@ async function genCarte(){
   const title=document.getElementById('chapTitle').value.trim();
   const sub=document.getElementById('chapSub').value.trim();
   try{
-    coraw=await callGemini(`Tu es un assistant pédagogique pour une élève de 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
+    const raw=await callGemini(`Tu es un assistant pédagogique pour une élève de 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
 Carte mentale JSON uniquement, sans backticks ni texte autour.
 {"titre":"${title}","sous_titre":"${sub}","branches":[{"titre":"Branche","points":["point 1","point 2"]}],"mots_cles":["mot1","mot2"]}
 3-5 branches, 2-4 points courts, 5-8 mots-clés simples.
@@ -876,7 +876,7 @@ Règles :
 
 Cours : ${txt.substring(0,3000)}`);
     clearInterval(iv);
-    let p;try{p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());}catch{throw new Error('parse');}
+    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch{throw new Error('parse');}
     renderSynthese(p);
   }catch(e){
     clearInterval(iv);lr.style.display='none';
