@@ -384,12 +384,14 @@ function addToHist() {
 
 function buildGrid() {
   const h = getHist();
-  document.getElementById('subjGrid').innerHTML = SUBJS.map(s => {
-    const cnt = h.filter(x => x.sid === s.id).length;
-    return '<button class="subj-btn" onclick="selectSubj(\'' + s.id + '\')" style="border-color:' + s.border + ';">' +
-      (cnt ? '<span class="subj-cnt">' + cnt + '</span>' : '') +
-      '<i class="ti ' + s.icon + '" style="color:' + s.text + ';"></i><span>' + s.label + '</span></button>';
-  }).join('');
+  var gridHTML = '';
+  SUBJS.forEach(function(s) {
+    var cnt = h.filter(function(x) { return x.sid === s.id; }).length;
+    gridHTML += '<button class="subj-btn" onclick="selectSubj('' + s.id + '')" style="border-color:' + s.border + ';">';
+    if (cnt) gridHTML += '<span class="subj-cnt">' + cnt + '</span>';
+    gridHTML += '<i class="ti ' + s.icon + '" style="color:' + s.text + ';"></i><span>' + s.label + '</span></button>';
+  });
+  document.getElementById('subjGrid').innerHTML = gridHTML;
   renderHist();
   updateKeyStatus();
 }
@@ -400,14 +402,16 @@ function renderHist() {
   const hl = document.getElementById('histList');
   if (!h.length) { hs.style.display = 'none'; return; }
   hs.style.display = 'block';
-  hl.innerHTML = h.slice(0, 5).map((x, i) => {
-    const s = SUBJS.find(s => s.sid === x.sid) || SUBJS.find(s => s.id === x.sid) || SUBJS[8];
-    return '<div class="hist-item" onclick="loadHist(' + i + ')">' +
-      '<span class="hist-badge" style="background:' + s.color + ';color:' + s.text + ';border:0.5px solid ' + s.border + ';">' + s.label + '</span>' +
-      '<div class="hist-info"><div class="hist-name">' + x.title + (x.sub ? ' — ' + x.sub : '') + '</div>' +
-      '<div class="hist-date">' + x.date + '</div></div>' +
-      '<button class="hist-del" onclick="event.stopPropagation();delHist(' + i + ')"><i class="ti ti-x"></i></button></div>';
-  }).join('');
+  var histHTML = '';
+  h.slice(0, 5).forEach(function(x, i) {
+    var s = SUBJS.find(function(s) { return s.id === x.sid; }) || SUBJS[8];
+    histHTML += '<div class="hist-item" onclick="loadHist(' + i + ')">';
+    histHTML += '<span class="hist-badge" style="background:' + s.color + ';color:' + s.text + ';border:0.5px solid ' + s.border + ';">' + s.label + '</span>';
+    histHTML += '<div class="hist-info"><div class="hist-name">' + x.title + (x.sub ? ' — ' + x.sub : '') + '</div>';
+    histHTML += '<div class="hist-date">' + x.date + '</div></div>';
+    histHTML += '<button class="hist-del" onclick="event.stopPropagation();delHist(' + i + ')"><i class="ti ti-x"></i></button></div>';
+  });
+  hl.innerHTML = histHTML;
 }
 
 function loadHist(i) {
