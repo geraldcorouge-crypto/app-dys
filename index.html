@@ -574,11 +574,28 @@ function prompt_key(){
 async function callGemini(prompt){
   let GKEY=localStorage.getItem('gemini_key')||'';
   if(!GKEY){GKEY=prompt_key();if(!GKEY)throw new Error('Clé API manquante');}
-  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GKEY}`;
-  const resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.3,maxOutputTokens:1200}})});
-  if(!resp.ok)throw new Error('Gemini erreur '+resp.status);
+  // Essayer gemini-2.0-flash (plus récent, meilleur CORS)
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GKEY}`;
+  let resp;
+  try{
+    resp=await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{role:'user',parts:[{text:prompt}]}],
+        generationConfig:{temperature:0.3,maxOutputTokens:1200}
+      })
+    });
+  }catch(fetchErr){
+    throw new Error('Réseau inaccessible — vérifie ta connexion internet');
+  }
+  if(resp.status===400){localStorage.removeItem('gemini_key');throw new Error('Clé API invalide — reconfigure-la');}
+  if(resp.status===403){throw new Error('Clé API refusée (403) — vérifie sur aistudio.google.com');}
+  if(!resp.ok){throw new Error('Erreur Gemini '+resp.status);}
   const d=await resp.json();
-  return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  const text=d.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(!text)throw new Error('Réponse vide de Gemini');
+  return text;
 }
 
 /* ===== CARTE MENTALE ===== */
@@ -604,7 +621,7 @@ Cours: ${txt.substring(0,3000)}`);
     renderCarte(p);
   }catch(e){
     clearInterval(iv);lr.style.display='none';
-    document.getElementById('carteZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur. Vérifie ta connexion.</div>`;
+    document.getElementById('carteZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur : ${e.message}</div>`;
   }
 }
 
@@ -647,7 +664,7 @@ Cours: ${txt.substring(0,2500)}`);
     renderQuizQuestion();
   }catch(e){
     clearInterval(iv);lr.style.display='none';
-    document.getElementById('quizZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur. Vérifie ta connexion.</div>`;
+    document.getElementById('quizZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur : ${e.message}</div>`;
   }
 }
 
