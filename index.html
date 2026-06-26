@@ -164,6 +164,18 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
 .icon-btn:active{opacity:0.7;}
 
 @media(min-width:500px){.subject-grid{grid-template-columns:repeat(4,1fr);}.branches{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}}
+
+/* SYNTHÈSE */
+.synthese-header{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--radius) var(--radius) 0 0;font-size:13px;font-weight:500;}
+.synthese-block{border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px;}
+.synthese-body{padding:12px 14px;background:var(--bg);}
+.synthese-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);align-items:flex-start;}
+.synthese-item:last-child{border-bottom:none;}
+.synthese-bullet{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px;}
+.synthese-text{font-size:14px;line-height:1.75;color:var(--text);}
+.synthese-text.dys{font-family:var(--font-dys);letter-spacing:.05em;word-spacing:.18em;}
+.synthese-text strong{color:var(--text);background:#FAEEDA;padding:1px 4px;border-radius:4px;}
+.synthese-section-title{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;padding:6px 14px;background:var(--bg2);}
 </style>
 </head>
 <body>
@@ -218,6 +230,7 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
       <button class="tab" onclick="showTab('carte')"><i class="ti ti-hierarchy"></i> Carte</button>
       <button class="tab" onclick="showTab('quiz')"><i class="ti ti-help"></i> Quiz</button>
       <button class="tab" onclick="showTab('pomo')"><i class="ti ti-clock"></i> Timer</button>
+      <button class="tab" onclick="showTab('synthese')"><i class="ti ti-list-check"></i> Synthèse</button>
     </div>
 
     <!-- ÉCOUTE -->
@@ -258,6 +271,7 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
       <div class="btn-row">
         <button class="btn primary" onclick="genCarte()"><i class="ti ti-sparkles"></i> Générer la carte</button>
         <button class="btn primary" onclick="genQuiz()"><i class="ti ti-help"></i> Générer le quiz</button>
+        <button class="btn primary" onclick="genSynthese()"><i class="ti ti-list-check"></i> Générer la synthèse</button>
         <button class="btn" onclick="copyCours()"><i class="ti ti-copy" id="cpyIco"></i> <span id="cpyLbl">Copier</span></button>
         <button class="btn" onclick="dlCours()"><i class="ti ti-download"></i> .txt</button>
         <button class="btn danger" onclick="clearCours()"><i class="ti ti-trash"></i> Effacer</button>
@@ -299,6 +313,18 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
         <div style="font-size:13px;color:var(--text2);text-align:center;max-width:280px;">
           Alterne entre révision et pause pour mémoriser efficacement. Après <span id="pomoSessNum">4</span> sessions → grande pause !
         </div>
+      </div>
+    </div>
+
+    <!-- SYNTHÈSE -->
+    <div class="panel" id="panel-synthese">
+      <div class="load-row" id="loadSynthese"><div class="spinner"></div><span id="loadSyntheseMsg">Génération de la synthèse…</span></div>
+      <div id="syntheseZone">
+        <div class="mind-empty"><i class="ti ti-list-check"></i>Dicte un cours puis clique sur <strong>Générer la synthèse</strong>.</div>
+      </div>
+      <div class="btn-row" id="syntheseActs" style="display:none;">
+        <button class="btn" onclick="dlSynthese()"><i class="ti ti-download"></i> Télécharger</button>
+        <button class="btn" onclick="toggleTTSSynthese()"><i class="ti ti-volume" id="ttsSynIco"></i> Lire</button>
       </div>
     </div>
 
@@ -439,7 +465,7 @@ function resetWork(preloadCours=''){
 }
 
 function showTab(id){
-  const tabs=['rec','cours','carte','quiz','pomo'];
+  const tabs=['rec','cours','carte','quiz','pomo','synthese'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===id));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
@@ -809,6 +835,96 @@ function configKey(){
     localStorage.removeItem('gemini_key');
     document.getElementById('keyStatus').textContent='⚠️ Clé supprimée';
   }
+}
+
+async function genSynthese(){
+  const txt=document.getElementById('coursTA').value.trim();
+  if(!txt){toast('Dicte un cours d'abord !','err');return;}
+  showTab('synthese');
+  document.getElementById('syntheseZone').innerHTML='';
+  document.getElementById('syntheseActs').style.display='none';
+  const lr=document.getElementById('loadSynthese');lr.style.display='flex';
+  const msgs=['Lecture du cours…','Extraction des points clés…','Mise en forme…'];
+  let mi=0;const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadSyntheseMsg').textContent=msgs[mi];},1800);
+  const title=document.getElementById('chapTitle').value.trim();
+  const sub=document.getElementById('chapSub').value.trim();
+  try{
+    const raw=await callGemini(`Tu es un assistant pédagogique pour une élève de 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
+
+Extrais les points essentiels à retenir de ce cours. Réponds UNIQUEMENT en JSON valide, sans backticks.
+
+{
+  "titre": "${title}",
+  "sections": [
+    {
+      "nom": "Nom de la section",
+      "couleur": "purple",
+      "points": [
+        {"texte": "Point court avec <strong>mot clé</strong> en gras.", "emoji": "📌"}
+      ]
+    }
+  ]
+}
+
+Règles :
+- 2 à 4 sections thématiques
+- 3 à 5 points par section
+- Phrases très courtes (max 15 mots)
+- Mettre en <strong> les 1-2 mots les plus importants de chaque point
+- emoji pertinent pour chaque point
+- couleur parmi : purple, teal, coral, amber, blue
+
+Cours : ${txt.substring(0,3000)}`);
+    clearInterval(iv);
+    let p;try{p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());}catch{throw new Error('parse');}
+    renderSynthese(p);
+  }catch(e){
+    clearInterval(iv);lr.style.display='none';
+    document.getElementById('syntheseZone').innerHTML=`<div style="padding:12px;border-radius:var(--radius);background:var(--red-bg);border:0.5px solid var(--red);color:#A32D2D;font-size:13px;">Erreur : ${e.message}</div>`;
+  }
+}
+
+const SYNTHESE_COLORS={
+  purple:{bg:'#EEEDFE',border:'#AFA9EC',text:'#3C3489',bullet:'#EEEDFE',btext:'#3C3489'},
+  teal:  {bg:'#E1F5EE',border:'#5DCAA5',text:'#0F6E56',bullet:'#E1F5EE',btext:'#0F6E56'},
+  coral: {bg:'#FAECE7',border:'#F0997B',text:'#712B13',bullet:'#FAECE7',btext:'#712B13'},
+  amber: {bg:'#FAEEDA',border:'#EF9F27',text:'#633806',bullet:'#FAEEDA',btext:'#633806'},
+  blue:  {bg:'#E6F1FB',border:'#85B7EB',text:'#0C447C',bullet:'#E6F1FB',btext:'#0C447C'},
+};
+
+function renderSynthese(d){
+  document.getElementById('loadSynthese').style.display='none';
+  const dc=isDys?' dys':'';
+  let html=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+    <div style="font-size:16px;font-weight:500;">${d.titre}</div>
+  </div>`;
+  (d.sections||[]).forEach(sec=>{
+    const c=SYNTHESE_COLORS[sec.couleur]||SYNTHESE_COLORS.teal;
+    html+=`<div class="synthese-block" style="border-color:${c.border};">
+      <div class="synthese-section-title" style="background:${c.bg};color:${c.text};">${sec.nom}</div>
+      <div class="synthese-body">`;
+    (sec.points||[]).forEach((pt,i)=>{
+      html+=`<div class="synthese-item">
+        <div class="synthese-bullet" style="background:${c.bg};color:${c.text};">${pt.emoji||'•'}</div>
+        <div class="synthese-text${dc}">${pt.texte}</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  document.getElementById('syntheseZone').innerHTML=html;
+  document.getElementById('syntheseActs').style.display='flex';
+  addToHistory();
+  toast('Synthèse générée !','ok');
+}
+
+function dlSynthese(){dlBlob(document.getElementById('syntheseZone').innerText,'synthese.txt');}
+
+function toggleTTSSynthese(){
+  const txt=document.getElementById('syntheseZone').innerText;
+  if(!txt)return;
+  if(ttsPlaying){stopTTS();return;}
+  document.getElementById('coursTA').value=txt;
+  startTTS();
 }
 
 function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.className='toast',3000);}
