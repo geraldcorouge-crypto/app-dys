@@ -151,7 +151,7 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
         </button>
         <div class="mic-timer" id="micTimer" style="display:none;">0:00</div>
         <div class="mic-label" id="micLabel">Appuie pour dicter</div>
-        <div class="mic-hint">Audio enregistré + texte transcrit automatiquement dans Cours</div>
+        <div class="mic-hint" id="micHint">Audio enregistré + texte transcrit automatiquement dans Cours</div>
       </div>
 
       <div style="font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;">Transcription en direct</div>
@@ -253,6 +253,12 @@ function resetWork(){
   document.getElementById('ficheZone').innerHTML='<div class="mind-empty"><i class="ti ti-sitemap"></i>Dicte un cours puis clique sur <strong>Générer la carte</strong>.</div>';
   document.getElementById('ficheActs').style.display='none';
   document.getElementById('recList').innerHTML='<p style="font-size:13px;color:var(--text2);">Aucun enregistrement.</p>';
+  // Adapter message selon mobile/PC
+  if(typeof isMobile === 'function' && isMobile()){
+    document.getElementById('micHint').textContent = 'Le texte est transcrit en direct dans Cours écrit (audio non disponible sur mobile)';
+  } else {
+    document.getElementById('micHint').textContent = 'Audio enregistré + texte transcrit automatiquement dans Cours';
+  }
   document.getElementById('micBtn').className='mic-btn idle';
   document.getElementById('micIco').className='ti ti-microphone';
   document.getElementById('micLabel').textContent='Appuie pour dicter';
@@ -343,8 +349,16 @@ async function startRec(){
   document.getElementById('micTimer').style.display='block';
 }
 
+function isMobile(){
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 async function startAudio(){
-  // Lance MediaRecorder séparément, après SR
+  // Sur mobile, le micro est déjà utilisé par SR → pas d'enregistrement simultané possible
+  if(isMobile()){
+    console.log('Mobile détecté : enregistrement audio désactivé (micro utilisé par SR)');
+    return;
+  }
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
     mediaRec=new MediaRecorder(stream);
@@ -353,8 +367,7 @@ async function startAudio(){
     mediaRec.onstop=()=>saveAudio(stream);
     mediaRec.start(500);
   }catch(e){
-    // Sur certains Android le mic est déjà pris par SR → on ignore, la transcription fonctionne quand même
-    console.warn('MediaRecorder non disponible simultanément:', e.message);
+    console.warn('MediaRecorder non disponible:', e.message);
   }
 }
 
