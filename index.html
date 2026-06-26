@@ -179,6 +179,10 @@ body{font-family:var(--font);background:var(--bg3);color:var(--text);min-height:
     <p class="screen-title">Bonjour ! Quelle matière ?</p>
     <p class="screen-sub">Choisis pour commencer ou reprendre un chapitre.</p>
     <div class="subject-grid" id="subjGrid"></div>
+    <div style="margin-bottom:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <button class="btn" onclick="configKey()" style="font-size:12px;padding:7px 12px;"><i class="ti ti-key"></i> Clé API Gemini</button>
+      <span id="keyStatus" style="font-size:12px;color:var(--text2);"></span>
+    </div>
     <div class="history-section" id="historySection" style="display:none;">
       <div class="history-title">Chapitres récents</div>
       <div id="historyList"></div>
@@ -560,6 +564,23 @@ function dlBlob(c,n){const a=document.createElement('a');a.href=URL.createObject
 function dlCarte(){dlBlob(document.getElementById('carteZone').innerText,'carte.txt');}
 function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
 
+
+function prompt_key(){
+  const k=window.prompt('Entre ta clé API Gemini (aistudio.google.com) :');
+  if(k&&k.trim()){localStorage.setItem('gemini_key',k.trim());return k.trim();}
+  return null;
+}
+
+async function callGemini(prompt){
+  let GKEY=localStorage.getItem('gemini_key')||'';
+  if(!GKEY){GKEY=prompt_key();if(!GKEY)throw new Error('Clé API manquante');}
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GKEY}`;
+  const resp=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.3,maxOutputTokens:1200}})});
+  if(!resp.ok)throw new Error('Gemini erreur '+resp.status);
+  const d=await resp.json();
+  return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
 /* ===== CARTE MENTALE ===== */
 async function genCarte(){
   const txt=document.getElementById('coursTA').value.trim();
@@ -573,17 +594,12 @@ async function genCarte(){
   const title=document.getElementById('chapTitle').value.trim();
   const sub=document.getElementById('chapSub').value.trim();
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`Assistant pédagogique pour élève 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
-Carte mentale JSON uniquement, sans backticks.
+    coraw=await callGemini(`Tu es un assistant pédagogique pour une élève de 15 ans dyslexique. Matière: ${subj.label}. Chapitre: ${title}${sub?' – '+sub:''}.
+Carte mentale JSON uniquement, sans backticks ni texte autour.
 {"titre":"${title}","sous_titre":"${sub}","branches":[{"titre":"Branche","points":["point 1","point 2"]}],"mots_cles":["mot1","mot2"]}
 3-5 branches, 2-4 points courts, 5-8 mots-clés simples.
-Cours: ${txt.substring(0,3000)}`}]})
-    });
+Cours: ${txt.substring(0,3000)}`);
     clearInterval(iv);
-    const data=await resp.json();
-    const raw=data.content.find(b=>b.type==='text')?.text||'';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch{throw new Error('parse');}
     renderCarte(p);
   }catch(e){
@@ -619,17 +635,12 @@ async function genQuiz(){
   let mi=0;const iv=setInterval(()=>{mi=(mi+1)%msgs.length;document.getElementById('loadQuizMsg').textContent=msgs[mi];},1800);
   const title=document.getElementById('chapTitle').value.trim();
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`Crée un quiz de 5 questions QCM pour une élève de 15 ans dyslexique sur ce cours de ${subj.label} : "${title}".
+    const raw=await callGemini(`Crée un quiz de 5 questions QCM pour une élève de 15 ans dyslexique sur ce cours de ${subj.label} : "${title}".
 JSON uniquement, sans backticks :
 {"questions":[{"q":"Question ?","choix":["A","B","C","D"],"correct":0,"explication":"Explication courte."}]}
 correct = index du bon choix (0-3). Questions simples, réponses courtes.
-Cours: ${txt.substring(0,2500)}`}]})
-    });
+Cours: ${txt.substring(0,2500)}`);
     clearInterval(iv);
-    const data=await resp.json();
-    const raw=data.content.find(b=>b.type==='text')?.text||'';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch{throw new Error('parse');}
     quizData=p.questions||[];
     quizIdx=0;quizScore=0;
@@ -769,11 +780,31 @@ function renderPomoSessions(){
 function vibrate(){if(navigator.vibrate)navigator.vibrate([200,100,200]);}
 
 /* ===== UTILS ===== */
+function configKey(){
+  const current=localStorage.getItem('gemini_key')||'';
+  const k=window.prompt('Clé API Gemini (aistudio.google.com/app/apikey) :', current);
+  if(k===null)return;
+  if(k.trim()){
+    localStorage.setItem('gemini_key',k.trim());
+    document.getElementById('keyStatus').textContent='✅ Clé enregistrée';
+    toast('Clé API sauvegardée !','ok');
+  } else {
+    localStorage.removeItem('gemini_key');
+    document.getElementById('keyStatus').textContent='⚠️ Clé supprimée';
+  }
+}
+
 function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.className='toast',3000);}
 
 /* ===== INIT ===== */
 buildGrid();
 resetPomo();
+// Afficher statut clé
+(function(){
+  const k=localStorage.getItem('gemini_key');
+  const el=document.getElementById('keyStatus');
+  if(el)el.textContent=k?'✅ Clé enregistrée':'⚠️ Clé non configurée — carte et quiz nécessitent une clé';
+})();
 </script>
 </body>
 </html>
