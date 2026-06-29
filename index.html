@@ -345,7 +345,7 @@ async function callGemini(prompt) {
 }
 
 function parseJSON(raw) {
-  return JSON.parse(raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim());
+  var clean = raw.replace(/^[\s\S]*?\{/,'\x7b').replace(/\}[\s\S]*$/,'\x7d').trim(); try { return JSON.parse(clean); } catch(e2) { return JSON.parse(raw.replace(/[\s\S]*?(\{[\s\S]*\})[\s\S]*/,'$1').trim()); }
 }
 
 function configKey() {
