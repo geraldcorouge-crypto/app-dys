@@ -309,16 +309,16 @@ const SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
 
 // ===== GEMINI =====
 async function callGemini(prompt) {
-  const key = localStorage.getItem('gemini_key') || '';
+  var key = localStorage.getItem('gemini_key') || '';
   if (!key) {
-    const k = window.prompt('Entre ta clé API Gemini (aistudio.google.com/app/apikey) :');
+    var k = window.prompt('Entre ta clé API Gemini (aistudio.google.com/app/apikey) :');
     if (!k || !k.trim()) throw new Error('Clé API manquante');
     localStorage.setItem('gemini_key', k.trim());
     updateKeyStatus();
   }
-  const gkey = localStorage.getItem('gemini_key');
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + gkey;
-  let resp;
+  var gkey = localStorage.getItem('gemini_key');
+  var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + gkey;
+  var resp;
   try {
     resp = await fetch(url, {
       method: 'POST',
@@ -338,8 +338,8 @@ async function callGemini(prompt) {
   }
   if (resp.status === 429) throw new Error('Quota dépassé (429) — attends 1 minute');
   if (!resp.ok) throw new Error('Erreur Gemini ' + resp.status);
-  const d = await resp.json();
-  const txt = d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] ? d.candidates[0].content.parts[0].text : '';
+  var d = await resp.json();
+  var txt = d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] ? d.candidates[0].content.parts[0].text : '';
   if (!txt) throw new Error('Réponse vide');
   return txt;
 }
@@ -349,8 +349,8 @@ function parseJSON(raw) {
 }
 
 function configKey() {
-  const cur = localStorage.getItem('gemini_key') || '';
-  const k = window.prompt('Clé API Gemini :', cur);
+  var cur = localStorage.getItem('gemini_key') || '';
+  var k = window.prompt('Clé API Gemini :', cur);
   if (k === null) return;
   if (k.trim()) {
     localStorage.setItem('gemini_key', k.trim());
@@ -363,7 +363,7 @@ function configKey() {
 }
 
 function updateKeyStatus() {
-  const el = document.getElementById('keyStatus');
+  var el = document.getElementById('keyStatus');
   if (!el) return;
   el.textContent = localStorage.getItem('gemini_key') ? '✅ Clé enregistrée' : '⚠️ Clé non configurée';
 }
@@ -373,17 +373,17 @@ function getHist() { try { return JSON.parse(localStorage.getItem('mc_hist') || 
 function saveHist(h) { try { localStorage.setItem('mc_hist', JSON.stringify(h)); } catch {} }
 
 function addToHist() {
-  const title = document.getElementById('chapTitle').value.trim();
+  var title = document.getElementById('chapTitle').value.trim();
   if (!title || !subj) return;
-  const sub = document.getElementById('chapSub').value.trim();
-  const cours = document.getElementById('coursTA').value.trim();
-  const h = getHist().filter(x => !(x.sid === subj.id && x.title === title));
+  var sub = document.getElementById('chapSub').value.trim();
+  var cours = document.getElementById('coursTA').value.trim();
+  var h = getHist().filter(function(x) { return !(x.sid === subj.id && x.title === title); });
   h.unshift({ sid: subj.id, title, sub, cours, date: new Date().toLocaleDateString('fr-FR') });
   saveHist(h.slice(0, 20));
 }
 
 function buildGrid() {
-  const h = getHist();
+  var h = getHist();
   var gridHTML = '';
   SUBJS.forEach(function(s) {
     var cnt = h.filter(function(x) { return x.sid === s.id; }).length;
@@ -397,9 +397,9 @@ function buildGrid() {
 }
 
 function renderHist() {
-  const h = getHist();
-  const hs = document.getElementById('histSection');
-  const hl = document.getElementById('histList');
+  var h = getHist();
+  var hs = document.getElementById('histSection');
+  var hl = document.getElementById('histList');
   if (!h.length) { hs.style.display = 'none'; return; }
   hs.style.display = 'block';
   var histHTML = '';
@@ -415,23 +415,23 @@ function renderHist() {
 }
 
 function loadHist(i) {
-  const h = getHist();
-  const x = h[i];
+  var h = getHist();
+  var x = h[i];
   if (!x) return;
-  subj = SUBJS.find(s => s.id === x.sid) || SUBJS[8];
+  subj = SUBJS.find(function(s) { return s.id === x.sid; }) || SUBJS[8];
   document.getElementById('chapTitle').value = x.title;
   document.getElementById('chapSub').value = x.sub || '';
   goToWork(x.cours || '');
 }
 
 function delHist(i) {
-  const h = getHist(); h.splice(i, 1); saveHist(h); buildGrid();
+  var h = getHist(); h.splice(i, 1); saveHist(h); buildGrid();
 }
 
 // ===== NAVIGATION =====
 function selectSubj(id) {
-  subj = SUBJS.find(s => s.id === id);
-  const b = document.getElementById('chapBadge');
+  subj = SUBJS.find(function(s) { return s.id === id; });
+  var b = document.getElementById('chapBadge');
   b.style.cssText = 'background:' + subj.color + ';border:0.5px solid ' + subj.border + ';color:' + subj.text + ';';
   b.innerHTML = '<i class="ti ' + subj.icon + '"></i> ' + subj.label;
   document.getElementById('chapTitle').value = '';
@@ -447,11 +447,11 @@ function goBack(to) {
 
 function goToWork(preload) {
   preload = preload || '';
-  const title = document.getElementById('chapTitle').value.trim();
+  var title = document.getElementById('chapTitle').value.trim();
   if (!title) { document.getElementById('chapTitle').focus(); toast('Entre le titre', 'err'); return; }
-  const sub = document.getElementById('chapSub').value.trim();
+  var sub = document.getElementById('chapSub').value.trim();
   document.getElementById('chapInfo').textContent = subj.label + ' — ' + title + (sub ? ' (' + sub + ')' : '');
-  const hb = document.getElementById('hBadge');
+  var hb = document.getElementById('hBadge');
   hb.style.cssText = 'display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;background:' + subj.color + ';border:0.5px solid ' + subj.border + ';color:' + subj.text + ';';
   hb.innerHTML = '<i class="ti ' + subj.icon + '"></i> ' + subj.label;
   resetWork(preload);
@@ -459,7 +459,7 @@ function goToWork(preload) {
 }
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
 }
 
@@ -485,9 +485,9 @@ function resetWork(preload) {
 }
 
 function showTab(id) {
-  const ids = ['rec','cours','carte','syn','quiz','pomo'];
-  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ids[i] === id));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  var ids = ['rec','cours','carte','syn','quiz','pomo'];
+  document.querySelectorAll('.tab').forEach(function(t, i) { t.classList.toggle('active', ids[i] === id); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
   document.getElementById('panel-' + id).classList.add('active');
 }
 
